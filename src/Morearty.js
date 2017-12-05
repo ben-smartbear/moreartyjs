@@ -418,7 +418,7 @@ module.exports = function (React, DOM) {
       };
 
       var forceUpdate = function (comp, f) {
-        if (comp.isMounted()) {
+        if (comp.isMounted) {
           comp.forceUpdate(f);
         }
       };
@@ -666,6 +666,7 @@ module.exports = function (React, DOM) {
         if (this.observedBindings) {
           this.observedBindings.forEach(setupObservedBindingListener.bind(null, this));
         }
+        this.isMounted = true;
       },
 
       shouldComponentUpdate: function (nextProps, nextState, nextContext) {
@@ -731,6 +732,7 @@ module.exports = function (React, DOM) {
           this._bindingListenerRemovers.forEach(function (remover) { remover(); });
           this._bindingListenerRemovers = [];
         }
+        delete this.isMounted;
       }
 
     },
