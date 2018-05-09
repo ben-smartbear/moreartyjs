@@ -1,7 +1,7 @@
 var Util = require('./Util');
-var DOMFactories = require('react-dom-factories');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var DOMFactories = require('react-dom-factories');
 var createReactClass = require('create-react-class');
 
 var _ = (function() {

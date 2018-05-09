@@ -22100,9 +22100,9 @@ module.exports = ChangesDescriptor;
 },{"./Util":37}],34:[function(require,module,exports){
 (function (global){
 var Util = require('./Util');
-var DOMFactories = require('react-dom-factories');
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactDOM = require('react-dom');
+var DOMFactories = require('react-dom-factories');
 var createReactClass = require('create-react-class');
 
 var _ = (function() {
