@@ -9,6 +9,9 @@ var Binding = require('./Binding');
 var History = require('./History');
 var Callback = require('./util/Callback');
 
+var createReactClass = require('create-react-class');
+var PropTypes = require('prop-types');
+
 var MERGE_STRATEGY = Object.freeze({
   OVERWRITE: 'overwrite',
   OVERWRITE_EMPTY: 'overwrite-empty',
@@ -66,13 +69,13 @@ propChanged = function(prop, currentProps, previousProps) {
 
 countProps = function(props) {
   var count = 0;
-  for (var ignore in props) ++count;
+  for (var ignore in props)
+    ++count;
   return count;
 };
 
 propsChanged = function(self, currentProps) {
-  var effectiveCurrentProps = currentProps || {},
-    effectivePreviousProps = self.props || {};
+  var effectiveCurrentProps = currentProps || {}, effectivePreviousProps = self.props || {};
 
   if (countProps(effectiveCurrentProps) !== countProps(effectivePreviousProps)) {
     return true;
@@ -142,8 +145,9 @@ initState = function(self, getStateMethodName, f) {
     var defaultStateValue = self[getStateMethodName]();
     if (defaultStateValue) {
       var binding = getBinding(self.props);
-      var mergeStrategy =
-        typeof self.getMergeStrategy === 'function' ? self.getMergeStrategy() : MERGE_STRATEGY.MERGE_PRESERVE;
+      var mergeStrategy = typeof self.getMergeStrategy === 'function'
+        ? self.getMergeStrategy()
+        : MERGE_STRATEGY.MERGE_PRESERVE;
 
       var immutableInstance = Imm.Iterable.isIterable(defaultStateValue);
 
@@ -542,11 +546,11 @@ module.exports = function(React, DOM) {
       var effectiveReactContext = reactContext || {};
       effectiveReactContext.morearty = ctx;
 
-      return React.createClass({
+      return createReactClass({
         displayName: 'Bootstrap',
 
         childContextTypes: {
-          morearty: React.PropTypes.instanceOf(Context).isRequired,
+          morearty: PropTypes.instanceOf(Context).isRequired,
         },
 
         getChildContext: function() {
@@ -611,7 +615,7 @@ module.exports = function(React, DOM) {
      * @classdesc Mixin */
     Mixin: {
       contextTypes: {
-        morearty: React.PropTypes.instanceOf(Context).isRequired,
+        morearty: PropTypes.instanceOf(Context).isRequired,
       },
 
       /** Get Morearty context.
