@@ -38,6 +38,7 @@
     "q": "1.4.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
+    "react-dom-factories": "^1.0.2",
     "sinon": "^1.17.x",
     "uglify-js": "^2.5.x"
   },

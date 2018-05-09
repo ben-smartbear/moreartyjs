@@ -1,4 +1,5 @@
 var Util = require('./Util');
+var DOMFactories = require('react-dom-factories');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var createReactClass = require('create-react-class');
@@ -41,23 +42,17 @@ var wrapComponent = function(comp, displayName) {
   });
 };
 
-function createElement(tag) {
-  return function(props) {
-    _(text, props);
-  };
-}
-
 /**
  * @name DOM
  * @namespace
  * @classdesc DOM module. Exposes requestAnimationFrame-friendly wrappers around input, textarea, and option.
  */
 var DOM = {
-  input: wrapComponent(createElement('input'), 'input'),
+  input: wrapComponent(DOMFactories.input, 'input'),
 
-  textarea: wrapComponent(createElement('textarea'), 'textarea'),
+  textarea: wrapComponent(DOMFactories.textarea, 'textarea'),
 
-  option: wrapComponent(createElement('option'), 'option'),
+  option: wrapComponent(DOMFactories.option, 'option'),
 };
 
 module.exports = DOM;
