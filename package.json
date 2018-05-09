@@ -36,14 +36,14 @@
     "mocha": "^2.3.x",
     "prop-types": "^15.6.1",
     "q": "1.4.1",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
     "react-dom-factories": "^1.0.2",
     "sinon": "^1.17.x",
     "uglify-js": "^2.5.x"
   },
   "peerDependencies": {
-    "immutable": "~3.8.x"
+    "immutable": "~3.8.x",
+    "react": "^16.x",
+    "react-dom": "^16.x"
   },
   "browserify-shim": {
     "react": "global:React",
