@@ -44,5 +44,8 @@
   "browserify-shim": {
     "react": "global:React",
     "immutable": "global:Immutable"
+  },
+  "dependencies": {
+    "create-react-class": "^15.6.3"
   }
 }
