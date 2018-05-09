@@ -5,7 +5,7 @@ var DOM = require('./src/DOM');
 module.exports = require('./src/Morearty')(React, DOM);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./src/DOM":33,"./src/Morearty":35}],2:[function(require,module,exports){
+},{"./src/DOM":34,"./src/Morearty":36}],2:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -965,7 +965,7 @@ module.exports = factory(
   ReactNoopUpdateQueue
 );
 
-},{"./factory":2,"react":30}],4:[function(require,module,exports){
+},{"./factory":2,"react":31}],4:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -2494,6 +2494,205 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 module.exports = ReactPropTypesSecret;
 
 },{}],25:[function(require,module,exports){
+(function (global){
+'use strict';
+
+/**
+ * Copyright (c) 2015-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+(function(f) {
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
+    module.exports = f(require('react'));
+    /* global define */
+  } else if (typeof define === 'function' && define.amd) {
+    define(['react'], f);
+  } else {
+    var g;
+    if (typeof window !== 'undefined') {
+      g = window;
+    } else if (typeof global !== 'undefined') {
+      g = global;
+    } else if (typeof self !== 'undefined') {
+      g = self;
+    } else {
+      g = this;
+    }
+
+    if (typeof g.React === 'undefined') {
+      throw Error('React module should be required before ReactDOMFactories');
+    }
+
+    g.ReactDOMFactories = f(g.React);
+  }
+})(function(React) {
+  /**
+   * Create a factory that creates HTML tag elements.
+   */
+  function createDOMFactory(type) {
+    var factory = React.createElement.bind(null, type);
+    // Expose the type on the factory and the prototype so that it can be
+    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+    // This should not be named `constructor` since this may not be the function
+    // that created the element, and it may not even be a constructor.
+    factory.type = type;
+    return factory;
+  };
+
+  /**
+   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
+   */
+  var ReactDOMFactories = {
+    a: createDOMFactory('a'),
+    abbr: createDOMFactory('abbr'),
+    address: createDOMFactory('address'),
+    area: createDOMFactory('area'),
+    article: createDOMFactory('article'),
+    aside: createDOMFactory('aside'),
+    audio: createDOMFactory('audio'),
+    b: createDOMFactory('b'),
+    base: createDOMFactory('base'),
+    bdi: createDOMFactory('bdi'),
+    bdo: createDOMFactory('bdo'),
+    big: createDOMFactory('big'),
+    blockquote: createDOMFactory('blockquote'),
+    body: createDOMFactory('body'),
+    br: createDOMFactory('br'),
+    button: createDOMFactory('button'),
+    canvas: createDOMFactory('canvas'),
+    caption: createDOMFactory('caption'),
+    cite: createDOMFactory('cite'),
+    code: createDOMFactory('code'),
+    col: createDOMFactory('col'),
+    colgroup: createDOMFactory('colgroup'),
+    data: createDOMFactory('data'),
+    datalist: createDOMFactory('datalist'),
+    dd: createDOMFactory('dd'),
+    del: createDOMFactory('del'),
+    details: createDOMFactory('details'),
+    dfn: createDOMFactory('dfn'),
+    dialog: createDOMFactory('dialog'),
+    div: createDOMFactory('div'),
+    dl: createDOMFactory('dl'),
+    dt: createDOMFactory('dt'),
+    em: createDOMFactory('em'),
+    embed: createDOMFactory('embed'),
+    fieldset: createDOMFactory('fieldset'),
+    figcaption: createDOMFactory('figcaption'),
+    figure: createDOMFactory('figure'),
+    footer: createDOMFactory('footer'),
+    form: createDOMFactory('form'),
+    h1: createDOMFactory('h1'),
+    h2: createDOMFactory('h2'),
+    h3: createDOMFactory('h3'),
+    h4: createDOMFactory('h4'),
+    h5: createDOMFactory('h5'),
+    h6: createDOMFactory('h6'),
+    head: createDOMFactory('head'),
+    header: createDOMFactory('header'),
+    hgroup: createDOMFactory('hgroup'),
+    hr: createDOMFactory('hr'),
+    html: createDOMFactory('html'),
+    i: createDOMFactory('i'),
+    iframe: createDOMFactory('iframe'),
+    img: createDOMFactory('img'),
+    input: createDOMFactory('input'),
+    ins: createDOMFactory('ins'),
+    kbd: createDOMFactory('kbd'),
+    keygen: createDOMFactory('keygen'),
+    label: createDOMFactory('label'),
+    legend: createDOMFactory('legend'),
+    li: createDOMFactory('li'),
+    link: createDOMFactory('link'),
+    main: createDOMFactory('main'),
+    map: createDOMFactory('map'),
+    mark: createDOMFactory('mark'),
+    menu: createDOMFactory('menu'),
+    menuitem: createDOMFactory('menuitem'),
+    meta: createDOMFactory('meta'),
+    meter: createDOMFactory('meter'),
+    nav: createDOMFactory('nav'),
+    noscript: createDOMFactory('noscript'),
+    object: createDOMFactory('object'),
+    ol: createDOMFactory('ol'),
+    optgroup: createDOMFactory('optgroup'),
+    option: createDOMFactory('option'),
+    output: createDOMFactory('output'),
+    p: createDOMFactory('p'),
+    param: createDOMFactory('param'),
+    picture: createDOMFactory('picture'),
+    pre: createDOMFactory('pre'),
+    progress: createDOMFactory('progress'),
+    q: createDOMFactory('q'),
+    rp: createDOMFactory('rp'),
+    rt: createDOMFactory('rt'),
+    ruby: createDOMFactory('ruby'),
+    s: createDOMFactory('s'),
+    samp: createDOMFactory('samp'),
+    script: createDOMFactory('script'),
+    section: createDOMFactory('section'),
+    select: createDOMFactory('select'),
+    small: createDOMFactory('small'),
+    source: createDOMFactory('source'),
+    span: createDOMFactory('span'),
+    strong: createDOMFactory('strong'),
+    style: createDOMFactory('style'),
+    sub: createDOMFactory('sub'),
+    summary: createDOMFactory('summary'),
+    sup: createDOMFactory('sup'),
+    table: createDOMFactory('table'),
+    tbody: createDOMFactory('tbody'),
+    td: createDOMFactory('td'),
+    textarea: createDOMFactory('textarea'),
+    tfoot: createDOMFactory('tfoot'),
+    th: createDOMFactory('th'),
+    thead: createDOMFactory('thead'),
+    time: createDOMFactory('time'),
+    title: createDOMFactory('title'),
+    tr: createDOMFactory('tr'),
+    track: createDOMFactory('track'),
+    u: createDOMFactory('u'),
+    ul: createDOMFactory('ul'),
+    var: createDOMFactory('var'),
+    video: createDOMFactory('video'),
+    wbr: createDOMFactory('wbr'),
+
+    // SVG
+    circle: createDOMFactory('circle'),
+    clipPath: createDOMFactory('clipPath'),
+    defs: createDOMFactory('defs'),
+    ellipse: createDOMFactory('ellipse'),
+    g: createDOMFactory('g'),
+    image: createDOMFactory('image'),
+    line: createDOMFactory('line'),
+    linearGradient: createDOMFactory('linearGradient'),
+    mask: createDOMFactory('mask'),
+    path: createDOMFactory('path'),
+    pattern: createDOMFactory('pattern'),
+    polygon: createDOMFactory('polygon'),
+    polyline: createDOMFactory('polyline'),
+    radialGradient: createDOMFactory('radialGradient'),
+    rect: createDOMFactory('rect'),
+    stop: createDOMFactory('stop'),
+    svg: createDOMFactory('svg'),
+    text: createDOMFactory('text'),
+    tspan: createDOMFactory('tspan'),
+  };
+
+  // due to wrapper and conditionals at the top, this will either become
+  // `module.exports ReactDOMFactories` if that is available,
+  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
+  // if that is available,
+  // otherwise it will be defined as global variable.
+  return ReactDOMFactories;
+});
+
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"react":31}],26:[function(require,module,exports){
 (function (process){
 /** @license React v16.3.2
  * react-dom.development.js
@@ -19151,7 +19350,7 @@ module.exports = reactDom;
 }
 
 }).call(this,require('_process'))
-},{"_process":19,"fbjs/lib/ExecutionEnvironment":4,"fbjs/lib/camelizeStyleName":6,"fbjs/lib/containsNode":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/getActiveElement":10,"fbjs/lib/hyphenateStyleName":12,"fbjs/lib/invariant":13,"fbjs/lib/shallowEqual":16,"fbjs/lib/warning":17,"object-assign":18,"prop-types/checkPropTypes":20,"react":30}],26:[function(require,module,exports){
+},{"_process":19,"fbjs/lib/ExecutionEnvironment":4,"fbjs/lib/camelizeStyleName":6,"fbjs/lib/containsNode":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/getActiveElement":10,"fbjs/lib/hyphenateStyleName":12,"fbjs/lib/invariant":13,"fbjs/lib/shallowEqual":16,"fbjs/lib/warning":17,"object-assign":18,"prop-types/checkPropTypes":20,"react":31}],27:[function(require,module,exports){
 /** @license React v16.3.2
  * react-dom.production.min.js
  *
@@ -19399,7 +19598,7 @@ var Gg={createPortal:Fg,findDOMNode:function(a){return null==a?null:1===a.nodeTy
 null})}),!0):!1},unstable_createPortal:function(){return Fg.apply(void 0,arguments)},unstable_batchedUpdates:X.batchedUpdates,unstable_deferredUpdates:X.deferredUpdates,flushSync:X.flushSync,unstable_flushControlled:X.flushControlled,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{EventPluginHub:Ra,EventPluginRegistry:Ca,EventPropagators:kb,ReactControlledComponent:$b,ReactDOMComponentTree:bb,ReactDOMEventListener:$d},unstable_createRoot:function(a,b){return new tg(a,!0,null!=b&&!0===b.hydrate)}};
 X.injectIntoDevTools({findFiberByHostInstance:Ua,bundleType:0,version:"16.3.2",rendererPackageName:"react-dom"});var Hg=Object.freeze({default:Gg}),Ig=Hg&&Gg||Hg;module.exports=Ig["default"]?Ig["default"]:Ig;
 
-},{"fbjs/lib/ExecutionEnvironment":4,"fbjs/lib/containsNode":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/getActiveElement":10,"fbjs/lib/invariant":13,"fbjs/lib/shallowEqual":16,"object-assign":18,"react":30}],27:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":4,"fbjs/lib/containsNode":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/getActiveElement":10,"fbjs/lib/invariant":13,"fbjs/lib/shallowEqual":16,"object-assign":18,"react":31}],28:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -19441,7 +19640,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":25,"./cjs/react-dom.production.min.js":26,"_process":19}],28:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":26,"./cjs/react-dom.production.min.js":27,"_process":19}],29:[function(require,module,exports){
 (function (process){
 /** @license React v16.3.2
  * react.development.js
@@ -20859,7 +21058,7 @@ module.exports = react;
 }
 
 }).call(this,require('_process'))
-},{"_process":19,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"fbjs/lib/warning":17,"object-assign":18,"prop-types/checkPropTypes":20}],29:[function(require,module,exports){
+},{"_process":19,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"fbjs/lib/warning":17,"object-assign":18,"prop-types/checkPropTypes":20}],30:[function(require,module,exports){
 /** @license React v16.3.2
  * react.production.min.js
  *
@@ -20883,7 +21082,7 @@ _calculateChangedBits:b,_defaultValue:a,_currentValue:a,_changedBits:0,Provider:
 (k=a.type.defaultProps);for(c in b)J.call(b,c)&&!K.hasOwnProperty(c)&&(d[c]=void 0===b[c]&&void 0!==k?k[c]:b[c])}c=arguments.length-2;if(1===c)d.children=e;else if(1<c){k=Array(c);for(var l=0;l<c;l++)k[l]=arguments[l+2];d.children=k}return{$$typeof:t,type:a.type,key:g,ref:h,props:d,_owner:f}},createFactory:function(a){var b=L.bind(null,a);b.type=a;return b},isValidElement:M,version:"16.3.2",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:I,assign:m}},X=Object.freeze({default:W}),
 Y=X&&W||X;module.exports=Y["default"]?Y["default"]:Y;
 
-},{"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"object-assign":18}],30:[function(require,module,exports){
+},{"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"object-assign":18}],31:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -20894,7 +21093,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":28,"./cjs/react.production.min.js":29,"_process":19}],31:[function(require,module,exports){
+},{"./cjs/react.development.js":29,"./cjs/react.production.min.js":30,"_process":19}],32:[function(require,module,exports){
 (function (global){
 var Imm = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Util = require('./Util');
@@ -21794,7 +21993,7 @@ TransactionContext.prototype = (function () {
 module.exports = Binding;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ChangesDescriptor":32,"./Util":36}],32:[function(require,module,exports){
+},{"./ChangesDescriptor":33,"./Util":37}],33:[function(require,module,exports){
 var Util = require('./Util');
 
 /** Changes descriptor constructor.
@@ -21898,9 +22097,10 @@ ChangesDescriptor.prototype = {
 
 module.exports = ChangesDescriptor;
 
-},{"./Util":36}],33:[function(require,module,exports){
+},{"./Util":37}],34:[function(require,module,exports){
 (function (global){
 var Util = require('./Util');
+var DOMFactories = require('react-dom-factories');
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactDOM = require('react-dom');
 var createReactClass = require('create-react-class');
@@ -21943,29 +22143,23 @@ var wrapComponent = function(comp, displayName) {
   });
 };
 
-function createElement(tag) {
-  return function(props) {
-    _(text, props);
-  };
-}
-
 /**
  * @name DOM
  * @namespace
  * @classdesc DOM module. Exposes requestAnimationFrame-friendly wrappers around input, textarea, and option.
  */
 var DOM = {
-  input: wrapComponent(createElement('input'), 'input'),
+  input: wrapComponent(DOMFactories.input, 'input'),
 
-  textarea: wrapComponent(createElement('textarea'), 'textarea'),
+  textarea: wrapComponent(DOMFactories.textarea, 'textarea'),
 
-  option: wrapComponent(createElement('option'), 'option'),
+  option: wrapComponent(DOMFactories.option, 'option'),
 };
 
 module.exports = DOM;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Util":36,"create-react-class":3,"react-dom":27}],34:[function(require,module,exports){
+},{"./Util":37,"create-react-class":3,"react-dom":28,"react-dom-factories":25}],35:[function(require,module,exports){
 (function (global){
 var Imm = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Binding = require('./Binding');
@@ -22129,7 +22323,7 @@ var History = {
 module.exports = History;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Binding":31}],35:[function(require,module,exports){
+},{"./Binding":32}],36:[function(require,module,exports){
 (function (global){
 /**
  * @name Morearty
@@ -22964,7 +23158,7 @@ module.exports = function(React, DOM) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Binding":31,"./History":34,"./Util":36,"./util/Callback":37,"create-react-class":3,"prop-types":23}],36:[function(require,module,exports){
+},{"./Binding":32,"./History":35,"./Util":37,"./util/Callback":38,"create-react-class":3,"prop-types":23}],37:[function(require,module,exports){
 /**
  * @name Util
  * @namespace
@@ -23185,7 +23379,7 @@ module.exports = {
 
 };
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /**
  * @name Callback
  * @namespace
@@ -23274,5 +23468,5 @@ module.exports = {
 
 module.exports['delete'] = module.exports.remove;
 
-},{"../Util":36}]},{},[1])(1)
+},{"../Util":37}]},{},[1])(1)
 });
