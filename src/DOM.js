@@ -1,7 +1,6 @@
 var Util = require('./Util');
 var React = require('react');
 var ReactDOM = require('react-dom');
-var DOMFactories = require('react-dom-factories');
 var createReactClass = require('create-react-class');
 
 var _ = (function() {
@@ -42,17 +41,27 @@ var wrapComponent = function(comp, displayName) {
   });
 };
 
+function createDOMFactory(type) {
+  var factory = _.bind(null, type);
+  // Expose the type on the factory and the prototype so that it can be
+  // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+  // This should not be named `constructor` since this may not be the function
+  // that created the element, and it may not even be a constructor.
+  factory.type = type;
+  return factory;
+}
+
 /**
  * @name DOM
  * @namespace
  * @classdesc DOM module. Exposes requestAnimationFrame-friendly wrappers around input, textarea, and option.
  */
 var DOM = {
-  input: wrapComponent(DOMFactories.input, 'input'),
+  input: wrapComponent(createDOMFactory('input'), 'input'),
 
-  textarea: wrapComponent(DOMFactories.textarea, 'textarea'),
+  textarea: wrapComponent(createDOMFactory('textarea'), 'textarea'),
 
-  option: wrapComponent(DOMFactories.option, 'option'),
+  option: wrapComponent(createDOMFactory('option'), 'option'),
 };
 
 module.exports = DOM;
