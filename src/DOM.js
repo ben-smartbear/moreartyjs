@@ -1,15 +1,17 @@
 var Util = require('./Util');
 var React = require('react');
+var ReactDOM = require('react-dom');
+var createReactClass = require('create-react-class');
 
 var _ = (function() {
-  if (React) return React.DOM;
+  if (React) return React.createElement;
   else {
     throw new Error('Morearty: global variable React not found');
   }
 })();
 
 var wrapComponent = function(comp, displayName) {
-  return React.createClass({
+  return createReactClass({
     displayName: displayName,
 
     getInitialState: function() {
@@ -39,17 +41,23 @@ var wrapComponent = function(comp, displayName) {
   });
 };
 
+function createElement(tag) {
+  return function(props) {
+    _(text, props);
+  };
+}
+
 /**
  * @name DOM
  * @namespace
  * @classdesc DOM module. Exposes requestAnimationFrame-friendly wrappers around input, textarea, and option.
  */
 var DOM = {
-  input: wrapComponent(_.input, 'input'),
+  input: wrapComponent(createElement('input'), 'input'),
 
-  textarea: wrapComponent(_.textarea, 'textarea'),
+  textarea: wrapComponent(createElement('textarea'), 'textarea'),
 
-  option: wrapComponent(_.option, 'option'),
+  option: wrapComponent(createElement('option'), 'option'),
 };
 
 module.exports = DOM;
