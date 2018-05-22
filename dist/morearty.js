@@ -5,7 +5,7 @@ var DOM = require('./src/DOM');
 module.exports = require('./src/Morearty')(React, DOM);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./src/DOM":34,"./src/Morearty":36}],2:[function(require,module,exports){
+},{"./src/DOM":42,"./src/Morearty":44}],2:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -935,7 +935,7 @@ function factory(ReactComponent, isValidElement, ReactNoopUpdateQueue) {
 module.exports = factory;
 
 }).call(this,require('_process'))
-},{"_process":19,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"fbjs/lib/warning":17,"object-assign":18}],3:[function(require,module,exports){
+},{"_process":24,"fbjs/lib/emptyObject":5,"fbjs/lib/invariant":6,"fbjs/lib/warning":7,"object-assign":8}],3:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -965,147 +965,7 @@ module.exports = factory(
   ReactNoopUpdateQueue
 );
 
-},{"./factory":2,"react":31}],4:[function(require,module,exports){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-'use strict';
-
-var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-
-/**
- * Simple, lightweight module assisting with the detection and context of
- * Worker. Helps avoid circular dependencies and allows code to reason about
- * whether or not they are in a Worker, even if they never include the main
- * `ReactWorker` dependency.
- */
-var ExecutionEnvironment = {
-
-  canUseDOM: canUseDOM,
-
-  canUseWorkers: typeof Worker !== 'undefined',
-
-  canUseEventListeners: canUseDOM && !!(window.addEventListener || window.attachEvent),
-
-  canUseViewport: canUseDOM && !!window.screen,
-
-  isInWorker: !canUseDOM // For now, this is true - might change in the future.
-
-};
-
-module.exports = ExecutionEnvironment;
-},{}],5:[function(require,module,exports){
-"use strict";
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-var _hyphenPattern = /-(.)/g;
-
-/**
- * Camelcases a hyphenated string, for example:
- *
- *   > camelize('background-color')
- *   < "backgroundColor"
- *
- * @param {string} string
- * @return {string}
- */
-function camelize(string) {
-  return string.replace(_hyphenPattern, function (_, character) {
-    return character.toUpperCase();
-  });
-}
-
-module.exports = camelize;
-},{}],6:[function(require,module,exports){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-'use strict';
-
-var camelize = require('./camelize');
-
-var msPattern = /^-ms-/;
-
-/**
- * Camelcases a hyphenated CSS property name, for example:
- *
- *   > camelizeStyleName('background-color')
- *   < "backgroundColor"
- *   > camelizeStyleName('-moz-transition')
- *   < "MozTransition"
- *   > camelizeStyleName('-ms-transition')
- *   < "msTransition"
- *
- * As Andi Smith suggests
- * (http://www.andismith.com/blog/2012/02/modernizr-prefixed/), an `-ms` prefix
- * is converted to lowercase `ms`.
- *
- * @param {string} string
- * @return {string}
- */
-function camelizeStyleName(string) {
-  return camelize(string.replace(msPattern, 'ms-'));
-}
-
-module.exports = camelizeStyleName;
-},{"./camelize":5}],7:[function(require,module,exports){
-'use strict';
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-var isTextNode = require('./isTextNode');
-
-/*eslint-disable no-bitwise */
-
-/**
- * Checks if a given DOM node contains or is another DOM node.
- */
-function containsNode(outerNode, innerNode) {
-  if (!outerNode || !innerNode) {
-    return false;
-  } else if (outerNode === innerNode) {
-    return true;
-  } else if (isTextNode(outerNode)) {
-    return false;
-  } else if (isTextNode(innerNode)) {
-    return containsNode(outerNode, innerNode.parentNode);
-  } else if ('contains' in outerNode) {
-    return outerNode.contains(innerNode);
-  } else if (outerNode.compareDocumentPosition) {
-    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
-  } else {
-    return false;
-  }
-}
-
-module.exports = containsNode;
-},{"./isTextNode":15}],8:[function(require,module,exports){
+},{"./factory":2,"react":39}],4:[function(require,module,exports){
 "use strict";
 
 /**
@@ -1142,7 +1002,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 };
 
 module.exports = emptyFunction;
-},{}],9:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1162,112 +1022,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":19}],10:[function(require,module,exports){
-'use strict';
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/* eslint-disable fb-www/typeof-undefined */
-
-/**
- * Same as document.activeElement but wraps in a try-catch block. In IE it is
- * not safe to call document.activeElement if there is nothing focused.
- *
- * The activeElement will be null only if the document or document body is not
- * yet defined.
- *
- * @param {?DOMDocument} doc Defaults to current document.
- * @return {?DOMElement}
- */
-function getActiveElement(doc) /*?DOMElement*/{
-  doc = doc || (typeof document !== 'undefined' ? document : undefined);
-  if (typeof doc === 'undefined') {
-    return null;
-  }
-  try {
-    return doc.activeElement || doc.body;
-  } catch (e) {
-    return doc.body;
-  }
-}
-
-module.exports = getActiveElement;
-},{}],11:[function(require,module,exports){
-'use strict';
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-var _uppercasePattern = /([A-Z])/g;
-
-/**
- * Hyphenates a camelcased string, for example:
- *
- *   > hyphenate('backgroundColor')
- *   < "background-color"
- *
- * For CSS style names, use `hyphenateStyleName` instead which works properly
- * with all vendor prefixes, including `ms`.
- *
- * @param {string} string
- * @return {string}
- */
-function hyphenate(string) {
-  return string.replace(_uppercasePattern, '-$1').toLowerCase();
-}
-
-module.exports = hyphenate;
-},{}],12:[function(require,module,exports){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-'use strict';
-
-var hyphenate = require('./hyphenate');
-
-var msPattern = /^ms-/;
-
-/**
- * Hyphenates a camelcased CSS property name, for example:
- *
- *   > hyphenateStyleName('backgroundColor')
- *   < "background-color"
- *   > hyphenateStyleName('MozTransition')
- *   < "-moz-transition"
- *   > hyphenateStyleName('msTransition')
- *   < "-ms-transition"
- *
- * As Modernizr suggests (http://modernizr.com/docs/#prefixed), an `ms` prefix
- * is converted to `-ms-`.
- *
- * @param {string} string
- * @return {string}
- */
-function hyphenateStyleName(string) {
-  return hyphenate(string).replace(msPattern, '-ms-');
-}
-
-module.exports = hyphenateStyleName;
-},{"./hyphenate":11}],13:[function(require,module,exports){
+},{"_process":24}],6:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1323,119 +1078,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":19}],14:[function(require,module,exports){
-'use strict';
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-/**
- * @param {*} object The object to check.
- * @return {boolean} Whether or not the object is a DOM node.
- */
-function isNode(object) {
-  var doc = object ? object.ownerDocument || object : document;
-  var defaultView = doc.defaultView || window;
-  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));
-}
-
-module.exports = isNode;
-},{}],15:[function(require,module,exports){
-'use strict';
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- */
-
-var isNode = require('./isNode');
-
-/**
- * @param {*} object The object to check.
- * @return {boolean} Whether or not the object is a DOM text node.
- */
-function isTextNode(object) {
-  return isNode(object) && object.nodeType == 3;
-}
-
-module.exports = isTextNode;
-},{"./isNode":14}],16:[function(require,module,exports){
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @typechecks
- * 
- */
-
-/*eslint-disable no-self-compare */
-
-'use strict';
-
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-
-/**
- * inlined Object.is polyfill to avoid requiring consumers ship their own
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
- */
-function is(x, y) {
-  // SameValue algorithm
-  if (x === y) {
-    // Steps 1-5, 7-10
-    // Steps 6.b-6.e: +0 != -0
-    // Added the nonzero y check to make Flow happy, but it is redundant
-    return x !== 0 || y !== 0 || 1 / x === 1 / y;
-  } else {
-    // Step 6.a: NaN == NaN
-    return x !== x && y !== y;
-  }
-}
-
-/**
- * Performs equality by iterating through keys on an object and returning false
- * when any key has values which are not strictly equal between the arguments.
- * Returns true when the values of all keys are strictly equal.
- */
-function shallowEqual(objA, objB) {
-  if (is(objA, objB)) {
-    return true;
-  }
-
-  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-    return false;
-  }
-
-  var keysA = Object.keys(objA);
-  var keysB = Object.keys(objB);
-
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-
-  // Test for A's keys different from B.
-  for (var i = 0; i < keysA.length; i++) {
-    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-module.exports = shallowEqual;
-},{}],17:[function(require,module,exports){
+},{"_process":24}],7:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -1500,7 +1143,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":8,"_process":19}],18:[function(require,module,exports){
+},{"./emptyFunction":4,"_process":24}],8:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -1592,7 +1235,374 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],19:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+'use strict';
+
+var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+
+/**
+ * Simple, lightweight module assisting with the detection and context of
+ * Worker. Helps avoid circular dependencies and allows code to reason about
+ * whether or not they are in a Worker, even if they never include the main
+ * `ReactWorker` dependency.
+ */
+var ExecutionEnvironment = {
+
+  canUseDOM: canUseDOM,
+
+  canUseWorkers: typeof Worker !== 'undefined',
+
+  canUseEventListeners: canUseDOM && !!(window.addEventListener || window.attachEvent),
+
+  canUseViewport: canUseDOM && !!window.screen,
+
+  isInWorker: !canUseDOM // For now, this is true - might change in the future.
+
+};
+
+module.exports = ExecutionEnvironment;
+},{}],10:[function(require,module,exports){
+"use strict";
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+var _hyphenPattern = /-(.)/g;
+
+/**
+ * Camelcases a hyphenated string, for example:
+ *
+ *   > camelize('background-color')
+ *   < "backgroundColor"
+ *
+ * @param {string} string
+ * @return {string}
+ */
+function camelize(string) {
+  return string.replace(_hyphenPattern, function (_, character) {
+    return character.toUpperCase();
+  });
+}
+
+module.exports = camelize;
+},{}],11:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+'use strict';
+
+var camelize = require('./camelize');
+
+var msPattern = /^-ms-/;
+
+/**
+ * Camelcases a hyphenated CSS property name, for example:
+ *
+ *   > camelizeStyleName('background-color')
+ *   < "backgroundColor"
+ *   > camelizeStyleName('-moz-transition')
+ *   < "MozTransition"
+ *   > camelizeStyleName('-ms-transition')
+ *   < "msTransition"
+ *
+ * As Andi Smith suggests
+ * (http://www.andismith.com/blog/2012/02/modernizr-prefixed/), an `-ms` prefix
+ * is converted to lowercase `ms`.
+ *
+ * @param {string} string
+ * @return {string}
+ */
+function camelizeStyleName(string) {
+  return camelize(string.replace(msPattern, 'ms-'));
+}
+
+module.exports = camelizeStyleName;
+},{"./camelize":10}],12:[function(require,module,exports){
+'use strict';
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+var isTextNode = require('./isTextNode');
+
+/*eslint-disable no-bitwise */
+
+/**
+ * Checks if a given DOM node contains or is another DOM node.
+ */
+function containsNode(outerNode, innerNode) {
+  if (!outerNode || !innerNode) {
+    return false;
+  } else if (outerNode === innerNode) {
+    return true;
+  } else if (isTextNode(outerNode)) {
+    return false;
+  } else if (isTextNode(innerNode)) {
+    return containsNode(outerNode, innerNode.parentNode);
+  } else if ('contains' in outerNode) {
+    return outerNode.contains(innerNode);
+  } else if (outerNode.compareDocumentPosition) {
+    return !!(outerNode.compareDocumentPosition(innerNode) & 16);
+  } else {
+    return false;
+  }
+}
+
+module.exports = containsNode;
+},{"./isTextNode":20}],13:[function(require,module,exports){
+arguments[4][4][0].apply(exports,arguments)
+},{"dup":4}],14:[function(require,module,exports){
+arguments[4][5][0].apply(exports,arguments)
+},{"_process":24,"dup":5}],15:[function(require,module,exports){
+'use strict';
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/* eslint-disable fb-www/typeof-undefined */
+
+/**
+ * Same as document.activeElement but wraps in a try-catch block. In IE it is
+ * not safe to call document.activeElement if there is nothing focused.
+ *
+ * The activeElement will be null only if the document or document body is not
+ * yet defined.
+ *
+ * @param {?DOMDocument} doc Defaults to current document.
+ * @return {?DOMElement}
+ */
+function getActiveElement(doc) /*?DOMElement*/{
+  doc = doc || (typeof document !== 'undefined' ? document : undefined);
+  if (typeof doc === 'undefined') {
+    return null;
+  }
+  try {
+    return doc.activeElement || doc.body;
+  } catch (e) {
+    return doc.body;
+  }
+}
+
+module.exports = getActiveElement;
+},{}],16:[function(require,module,exports){
+'use strict';
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+var _uppercasePattern = /([A-Z])/g;
+
+/**
+ * Hyphenates a camelcased string, for example:
+ *
+ *   > hyphenate('backgroundColor')
+ *   < "background-color"
+ *
+ * For CSS style names, use `hyphenateStyleName` instead which works properly
+ * with all vendor prefixes, including `ms`.
+ *
+ * @param {string} string
+ * @return {string}
+ */
+function hyphenate(string) {
+  return string.replace(_uppercasePattern, '-$1').toLowerCase();
+}
+
+module.exports = hyphenate;
+},{}],17:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+'use strict';
+
+var hyphenate = require('./hyphenate');
+
+var msPattern = /^ms-/;
+
+/**
+ * Hyphenates a camelcased CSS property name, for example:
+ *
+ *   > hyphenateStyleName('backgroundColor')
+ *   < "background-color"
+ *   > hyphenateStyleName('MozTransition')
+ *   < "-moz-transition"
+ *   > hyphenateStyleName('msTransition')
+ *   < "-ms-transition"
+ *
+ * As Modernizr suggests (http://modernizr.com/docs/#prefixed), an `ms` prefix
+ * is converted to `-ms-`.
+ *
+ * @param {string} string
+ * @return {string}
+ */
+function hyphenateStyleName(string) {
+  return hyphenate(string).replace(msPattern, '-ms-');
+}
+
+module.exports = hyphenateStyleName;
+},{"./hyphenate":16}],18:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"_process":24,"dup":6}],19:[function(require,module,exports){
+'use strict';
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM node.
+ */
+function isNode(object) {
+  var doc = object ? object.ownerDocument || object : document;
+  var defaultView = doc.defaultView || window;
+  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));
+}
+
+module.exports = isNode;
+},{}],20:[function(require,module,exports){
+'use strict';
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ */
+
+var isNode = require('./isNode');
+
+/**
+ * @param {*} object The object to check.
+ * @return {boolean} Whether or not the object is a DOM text node.
+ */
+function isTextNode(object) {
+  return isNode(object) && object.nodeType == 3;
+}
+
+module.exports = isTextNode;
+},{"./isNode":19}],21:[function(require,module,exports){
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * @typechecks
+ * 
+ */
+
+/*eslint-disable no-self-compare */
+
+'use strict';
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+/**
+ * inlined Object.is polyfill to avoid requiring consumers ship their own
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+ */
+function is(x, y) {
+  // SameValue algorithm
+  if (x === y) {
+    // Steps 1-5, 7-10
+    // Steps 6.b-6.e: +0 != -0
+    // Added the nonzero y check to make Flow happy, but it is redundant
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    // Step 6.a: NaN == NaN
+    return x !== x && y !== y;
+  }
+}
+
+/**
+ * Performs equality by iterating through keys on an object and returning false
+ * when any key has values which are not strictly equal between the arguments.
+ * Returns true when the values of all keys are strictly equal.
+ */
+function shallowEqual(objA, objB) {
+  if (is(objA, objB)) {
+    return true;
+  }
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    return false;
+  }
+
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+
+  // Test for A's keys different from B.
+  for (var i = 0; i < keysA.length; i++) {
+    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+module.exports = shallowEqual;
+},{}],22:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"./emptyFunction":13,"_process":24,"dup":7}],23:[function(require,module,exports){
+arguments[4][8][0].apply(exports,arguments)
+},{"dup":8}],24:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -1778,7 +1788,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],20:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -1841,7 +1851,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":24,"_process":19,"fbjs/lib/invariant":13,"fbjs/lib/warning":17}],21:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":29,"_process":24,"fbjs/lib/invariant":31,"fbjs/lib/warning":32}],26:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -1901,7 +1911,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":24,"fbjs/lib/emptyFunction":8,"fbjs/lib/invariant":13}],22:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":29,"fbjs/lib/emptyFunction":30,"fbjs/lib/invariant":31}],27:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -2447,7 +2457,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":20,"./lib/ReactPropTypesSecret":24,"_process":19,"fbjs/lib/emptyFunction":8,"fbjs/lib/invariant":13,"fbjs/lib/warning":17,"object-assign":18}],23:[function(require,module,exports){
+},{"./checkPropTypes":25,"./lib/ReactPropTypesSecret":29,"_process":24,"fbjs/lib/emptyFunction":30,"fbjs/lib/invariant":31,"fbjs/lib/warning":32,"object-assign":33}],28:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -2479,7 +2489,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":21,"./factoryWithTypeCheckers":22,"_process":19}],24:[function(require,module,exports){
+},{"./factoryWithThrowingShims":26,"./factoryWithTypeCheckers":27,"_process":24}],29:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -2493,206 +2503,15 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],25:[function(require,module,exports){
-(function (global){
-'use strict';
-
-/**
- * Copyright (c) 2015-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-(function(f) {
-  if (typeof exports === 'object' && typeof module !== 'undefined') {
-    module.exports = f(require('react'));
-    /* global define */
-  } else if (typeof define === 'function' && define.amd) {
-    define(['react'], f);
-  } else {
-    var g;
-    if (typeof window !== 'undefined') {
-      g = window;
-    } else if (typeof global !== 'undefined') {
-      g = global;
-    } else if (typeof self !== 'undefined') {
-      g = self;
-    } else {
-      g = this;
-    }
-
-    if (typeof g.React === 'undefined') {
-      throw Error('React module should be required before ReactDOMFactories');
-    }
-
-    g.ReactDOMFactories = f(g.React);
-  }
-})(function(React) {
-  /**
-   * Create a factory that creates HTML tag elements.
-   */
-  function createDOMFactory(type) {
-    var factory = React.createElement.bind(null, type);
-    // Expose the type on the factory and the prototype so that it can be
-    // easily accessed on elements. E.g. `<Foo />.type === Foo`.
-    // This should not be named `constructor` since this may not be the function
-    // that created the element, and it may not even be a constructor.
-    factory.type = type;
-    return factory;
-  };
-
-  /**
-   * Creates a mapping from supported HTML tags to `ReactDOMComponent` classes.
-   */
-  var ReactDOMFactories = {
-    a: createDOMFactory('a'),
-    abbr: createDOMFactory('abbr'),
-    address: createDOMFactory('address'),
-    area: createDOMFactory('area'),
-    article: createDOMFactory('article'),
-    aside: createDOMFactory('aside'),
-    audio: createDOMFactory('audio'),
-    b: createDOMFactory('b'),
-    base: createDOMFactory('base'),
-    bdi: createDOMFactory('bdi'),
-    bdo: createDOMFactory('bdo'),
-    big: createDOMFactory('big'),
-    blockquote: createDOMFactory('blockquote'),
-    body: createDOMFactory('body'),
-    br: createDOMFactory('br'),
-    button: createDOMFactory('button'),
-    canvas: createDOMFactory('canvas'),
-    caption: createDOMFactory('caption'),
-    cite: createDOMFactory('cite'),
-    code: createDOMFactory('code'),
-    col: createDOMFactory('col'),
-    colgroup: createDOMFactory('colgroup'),
-    data: createDOMFactory('data'),
-    datalist: createDOMFactory('datalist'),
-    dd: createDOMFactory('dd'),
-    del: createDOMFactory('del'),
-    details: createDOMFactory('details'),
-    dfn: createDOMFactory('dfn'),
-    dialog: createDOMFactory('dialog'),
-    div: createDOMFactory('div'),
-    dl: createDOMFactory('dl'),
-    dt: createDOMFactory('dt'),
-    em: createDOMFactory('em'),
-    embed: createDOMFactory('embed'),
-    fieldset: createDOMFactory('fieldset'),
-    figcaption: createDOMFactory('figcaption'),
-    figure: createDOMFactory('figure'),
-    footer: createDOMFactory('footer'),
-    form: createDOMFactory('form'),
-    h1: createDOMFactory('h1'),
-    h2: createDOMFactory('h2'),
-    h3: createDOMFactory('h3'),
-    h4: createDOMFactory('h4'),
-    h5: createDOMFactory('h5'),
-    h6: createDOMFactory('h6'),
-    head: createDOMFactory('head'),
-    header: createDOMFactory('header'),
-    hgroup: createDOMFactory('hgroup'),
-    hr: createDOMFactory('hr'),
-    html: createDOMFactory('html'),
-    i: createDOMFactory('i'),
-    iframe: createDOMFactory('iframe'),
-    img: createDOMFactory('img'),
-    input: createDOMFactory('input'),
-    ins: createDOMFactory('ins'),
-    kbd: createDOMFactory('kbd'),
-    keygen: createDOMFactory('keygen'),
-    label: createDOMFactory('label'),
-    legend: createDOMFactory('legend'),
-    li: createDOMFactory('li'),
-    link: createDOMFactory('link'),
-    main: createDOMFactory('main'),
-    map: createDOMFactory('map'),
-    mark: createDOMFactory('mark'),
-    menu: createDOMFactory('menu'),
-    menuitem: createDOMFactory('menuitem'),
-    meta: createDOMFactory('meta'),
-    meter: createDOMFactory('meter'),
-    nav: createDOMFactory('nav'),
-    noscript: createDOMFactory('noscript'),
-    object: createDOMFactory('object'),
-    ol: createDOMFactory('ol'),
-    optgroup: createDOMFactory('optgroup'),
-    option: createDOMFactory('option'),
-    output: createDOMFactory('output'),
-    p: createDOMFactory('p'),
-    param: createDOMFactory('param'),
-    picture: createDOMFactory('picture'),
-    pre: createDOMFactory('pre'),
-    progress: createDOMFactory('progress'),
-    q: createDOMFactory('q'),
-    rp: createDOMFactory('rp'),
-    rt: createDOMFactory('rt'),
-    ruby: createDOMFactory('ruby'),
-    s: createDOMFactory('s'),
-    samp: createDOMFactory('samp'),
-    script: createDOMFactory('script'),
-    section: createDOMFactory('section'),
-    select: createDOMFactory('select'),
-    small: createDOMFactory('small'),
-    source: createDOMFactory('source'),
-    span: createDOMFactory('span'),
-    strong: createDOMFactory('strong'),
-    style: createDOMFactory('style'),
-    sub: createDOMFactory('sub'),
-    summary: createDOMFactory('summary'),
-    sup: createDOMFactory('sup'),
-    table: createDOMFactory('table'),
-    tbody: createDOMFactory('tbody'),
-    td: createDOMFactory('td'),
-    textarea: createDOMFactory('textarea'),
-    tfoot: createDOMFactory('tfoot'),
-    th: createDOMFactory('th'),
-    thead: createDOMFactory('thead'),
-    time: createDOMFactory('time'),
-    title: createDOMFactory('title'),
-    tr: createDOMFactory('tr'),
-    track: createDOMFactory('track'),
-    u: createDOMFactory('u'),
-    ul: createDOMFactory('ul'),
-    var: createDOMFactory('var'),
-    video: createDOMFactory('video'),
-    wbr: createDOMFactory('wbr'),
-
-    // SVG
-    circle: createDOMFactory('circle'),
-    clipPath: createDOMFactory('clipPath'),
-    defs: createDOMFactory('defs'),
-    ellipse: createDOMFactory('ellipse'),
-    g: createDOMFactory('g'),
-    image: createDOMFactory('image'),
-    line: createDOMFactory('line'),
-    linearGradient: createDOMFactory('linearGradient'),
-    mask: createDOMFactory('mask'),
-    path: createDOMFactory('path'),
-    pattern: createDOMFactory('pattern'),
-    polygon: createDOMFactory('polygon'),
-    polyline: createDOMFactory('polyline'),
-    radialGradient: createDOMFactory('radialGradient'),
-    rect: createDOMFactory('rect'),
-    stop: createDOMFactory('stop'),
-    svg: createDOMFactory('svg'),
-    text: createDOMFactory('text'),
-    tspan: createDOMFactory('tspan'),
-  };
-
-  // due to wrapper and conditionals at the top, this will either become
-  // `module.exports ReactDOMFactories` if that is available,
-  // otherwise it will be defined via `define(['react'], ReactDOMFactories)`
-  // if that is available,
-  // otherwise it will be defined as global variable.
-  return ReactDOMFactories;
-});
-
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"react":31}],26:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
+arguments[4][4][0].apply(exports,arguments)
+},{"dup":4}],31:[function(require,module,exports){
+arguments[4][6][0].apply(exports,arguments)
+},{"_process":24,"dup":6}],32:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"./emptyFunction":30,"_process":24,"dup":7}],33:[function(require,module,exports){
+arguments[4][8][0].apply(exports,arguments)
+},{"dup":8}],34:[function(require,module,exports){
 (function (process){
 /** @license React v16.3.2
  * react-dom.development.js
@@ -19350,7 +19169,7 @@ module.exports = reactDom;
 }
 
 }).call(this,require('_process'))
-},{"_process":19,"fbjs/lib/ExecutionEnvironment":4,"fbjs/lib/camelizeStyleName":6,"fbjs/lib/containsNode":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/getActiveElement":10,"fbjs/lib/hyphenateStyleName":12,"fbjs/lib/invariant":13,"fbjs/lib/shallowEqual":16,"fbjs/lib/warning":17,"object-assign":18,"prop-types/checkPropTypes":20,"react":31}],27:[function(require,module,exports){
+},{"_process":24,"fbjs/lib/ExecutionEnvironment":9,"fbjs/lib/camelizeStyleName":11,"fbjs/lib/containsNode":12,"fbjs/lib/emptyFunction":13,"fbjs/lib/emptyObject":14,"fbjs/lib/getActiveElement":15,"fbjs/lib/hyphenateStyleName":17,"fbjs/lib/invariant":18,"fbjs/lib/shallowEqual":21,"fbjs/lib/warning":22,"object-assign":23,"prop-types/checkPropTypes":25,"react":39}],35:[function(require,module,exports){
 /** @license React v16.3.2
  * react-dom.production.min.js
  *
@@ -19598,7 +19417,7 @@ var Gg={createPortal:Fg,findDOMNode:function(a){return null==a?null:1===a.nodeTy
 null})}),!0):!1},unstable_createPortal:function(){return Fg.apply(void 0,arguments)},unstable_batchedUpdates:X.batchedUpdates,unstable_deferredUpdates:X.deferredUpdates,flushSync:X.flushSync,unstable_flushControlled:X.flushControlled,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{EventPluginHub:Ra,EventPluginRegistry:Ca,EventPropagators:kb,ReactControlledComponent:$b,ReactDOMComponentTree:bb,ReactDOMEventListener:$d},unstable_createRoot:function(a,b){return new tg(a,!0,null!=b&&!0===b.hydrate)}};
 X.injectIntoDevTools({findFiberByHostInstance:Ua,bundleType:0,version:"16.3.2",rendererPackageName:"react-dom"});var Hg=Object.freeze({default:Gg}),Ig=Hg&&Gg||Hg;module.exports=Ig["default"]?Ig["default"]:Ig;
 
-},{"fbjs/lib/ExecutionEnvironment":4,"fbjs/lib/containsNode":7,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/getActiveElement":10,"fbjs/lib/invariant":13,"fbjs/lib/shallowEqual":16,"object-assign":18,"react":31}],28:[function(require,module,exports){
+},{"fbjs/lib/ExecutionEnvironment":9,"fbjs/lib/containsNode":12,"fbjs/lib/emptyFunction":13,"fbjs/lib/emptyObject":14,"fbjs/lib/getActiveElement":15,"fbjs/lib/invariant":18,"fbjs/lib/shallowEqual":21,"object-assign":23,"react":39}],36:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -19640,7 +19459,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":26,"./cjs/react-dom.production.min.js":27,"_process":19}],29:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":34,"./cjs/react-dom.production.min.js":35,"_process":24}],37:[function(require,module,exports){
 (function (process){
 /** @license React v16.3.2
  * react.development.js
@@ -21058,7 +20877,7 @@ module.exports = react;
 }
 
 }).call(this,require('_process'))
-},{"_process":19,"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"fbjs/lib/warning":17,"object-assign":18,"prop-types/checkPropTypes":20}],30:[function(require,module,exports){
+},{"_process":24,"fbjs/lib/emptyFunction":13,"fbjs/lib/emptyObject":14,"fbjs/lib/invariant":18,"fbjs/lib/warning":22,"object-assign":23,"prop-types/checkPropTypes":25}],38:[function(require,module,exports){
 /** @license React v16.3.2
  * react.production.min.js
  *
@@ -21082,7 +20901,7 @@ _calculateChangedBits:b,_defaultValue:a,_currentValue:a,_changedBits:0,Provider:
 (k=a.type.defaultProps);for(c in b)J.call(b,c)&&!K.hasOwnProperty(c)&&(d[c]=void 0===b[c]&&void 0!==k?k[c]:b[c])}c=arguments.length-2;if(1===c)d.children=e;else if(1<c){k=Array(c);for(var l=0;l<c;l++)k[l]=arguments[l+2];d.children=k}return{$$typeof:t,type:a.type,key:g,ref:h,props:d,_owner:f}},createFactory:function(a){var b=L.bind(null,a);b.type=a;return b},isValidElement:M,version:"16.3.2",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:I,assign:m}},X=Object.freeze({default:W}),
 Y=X&&W||X;module.exports=Y["default"]?Y["default"]:Y;
 
-},{"fbjs/lib/emptyFunction":8,"fbjs/lib/emptyObject":9,"fbjs/lib/invariant":13,"object-assign":18}],31:[function(require,module,exports){
+},{"fbjs/lib/emptyFunction":13,"fbjs/lib/emptyObject":14,"fbjs/lib/invariant":18,"object-assign":23}],39:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -21093,7 +20912,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":29,"./cjs/react.production.min.js":30,"_process":19}],32:[function(require,module,exports){
+},{"./cjs/react.development.js":37,"./cjs/react.production.min.js":38,"_process":24}],40:[function(require,module,exports){
 (function (global){
 var Imm = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Util = require('./Util');
@@ -21107,11 +20926,11 @@ var UNSET_VALUE = {};
 
 var getBackingValue, setBackingValue;
 
-getBackingValue = function (binding) {
+getBackingValue = function(binding) {
   return binding._sharedInternals.backingValue;
 };
 
-setBackingValue = function (binding, newBackingValue) {
+setBackingValue = function(binding, newBackingValue) {
   binding._sharedInternals.backingValue = newBackingValue;
 };
 
@@ -21120,23 +20939,21 @@ var EMPTY_PATH, PATH_SEPARATOR, getPathElements, getValueAtPath;
 EMPTY_PATH = [];
 PATH_SEPARATOR = '.';
 
-getPathElements = function (path) {
+getPathElements = function(path) {
   return path ? path.split(PATH_SEPARATOR) : [];
 };
 
-getValueAtPath = function (backingValue, path) {
+getValueAtPath = function(backingValue, path) {
   return backingValue && path.length > 0 ? backingValue.getIn(path) : backingValue;
 };
 
 var asArrayPath, asStringPath;
 
-asArrayPath = function (path) {
-  return typeof path === 'string' ?
-    getPathElements(path) :
-    (Util.undefinedOrNull(path) ? [] : path);
+asArrayPath = function(path) {
+  return typeof path === 'string' ? getPathElements(path) : Util.undefinedOrNull(path) ? [] : path;
 };
 
-asStringPath = function (path) {
+asStringPath = function(path) {
   switch (typeof path) {
     case 'string':
       return path;
@@ -21149,13 +20966,13 @@ asStringPath = function (path) {
 
 var setOrUpdate, updateValue, removeValue, merge, clear;
 
-setOrUpdate = function (rootValue, effectivePath, f) {
-  return rootValue.updateIn(effectivePath, UNSET_VALUE, function (value) {
+setOrUpdate = function(rootValue, effectivePath, f) {
+  return rootValue.updateIn(effectivePath, UNSET_VALUE, function(value) {
     return value === UNSET_VALUE ? f() : f(value);
   });
 };
 
-updateValue = function (self, subpath, f) {
+updateValue = function(self, subpath, f) {
   var backingValue = getBackingValue(self);
   var effectivePath = Util.joinPaths(self._path, subpath);
   var newBackingValue = setOrUpdate(backingValue, effectivePath, f);
@@ -21169,7 +20986,7 @@ updateValue = function (self, subpath, f) {
   }
 };
 
-removeValue = function (self, subpath) {
+removeValue = function(self, subpath) {
   var effectivePath = Util.joinPaths(self._path, subpath);
   var backingValue = getBackingValue(self);
 
@@ -21180,7 +20997,7 @@ removeValue = function (self, subpath) {
     default:
       var pathTo = effectivePath.slice(0, len - 1);
       if (backingValue.has(pathTo[0]) || len === 1) {
-        var newBackingValue = backingValue.updateIn(pathTo, function (coll) {
+        var newBackingValue = backingValue.updateIn(pathTo, function(coll) {
           var key = effectivePath[len - 1];
           if (Imm.List.isList(coll)) {
             return coll.splice(key, 1);
@@ -21196,7 +21013,7 @@ removeValue = function (self, subpath) {
   }
 };
 
-merge = function (preserve, newValue, value) {
+merge = function(preserve, newValue, value) {
   if (Util.undefinedOrNull(value)) {
     return newValue;
   } else {
@@ -21208,55 +21025,63 @@ merge = function (preserve, newValue, value) {
   }
 };
 
-clear = function (value) {
+clear = function(value) {
   return Imm.Iterable.isIterable(value) ? value.clear() : null;
 };
 
-var mkStateTransition =
-  function (currentBackingValue, previousBackingValue, currentBackingMeta, previousBackingMeta, metaMetaChanged) {
-    return {
-      currentBackingValue: currentBackingValue,
-      currentBackingMeta: currentBackingMeta,
-      previousBackingValue: previousBackingValue,
-      previousBackingMeta: previousBackingMeta,
-      metaMetaChanged: metaMetaChanged || false
-    };
+var mkStateTransition = function(
+  currentBackingValue,
+  previousBackingValue,
+  currentBackingMeta,
+  previousBackingMeta,
+  metaMetaChanged
+) {
+  return {
+    currentBackingValue: currentBackingValue,
+    currentBackingMeta: currentBackingMeta,
+    previousBackingValue: previousBackingValue,
+    previousBackingMeta: previousBackingMeta,
+    metaMetaChanged: metaMetaChanged || false,
   };
+};
 
-var generateListenerId = function () {
-  return Math.random().toString(36).substr(2, 9);
+var generateListenerId = function() {
+  return Math.random()
+    .toString(36)
+    .substr(2, 9);
 };
 
 var notifyListeners, notifyGlobalListeners, startsWith, isPathAffected, notifyNonGlobalListeners, notifyAllListeners;
 
-notifyListeners = function (self, samePathListeners, listenerPath, path, stateTransition) {
+notifyListeners = function(self, samePathListeners, listenerPath, path, stateTransition) {
   var currentBackingValue = stateTransition.currentBackingValue;
   var previousBackingValue = stateTransition.previousBackingValue;
   var currentBackingMeta = stateTransition.currentBackingMeta;
   var previousBackingMeta = stateTransition.previousBackingMeta;
 
-  Util.getPropertyValues(samePathListeners).forEach(function (listenerDescriptor) {
+  Util.getPropertyValues(samePathListeners).forEach(function(listenerDescriptor) {
     if (!listenerDescriptor.disabled) {
       var listenerPathAsArray = asArrayPath(listenerPath);
 
-      var valueChanged = currentBackingValue !== previousBackingValue &&
+      var valueChanged =
+        currentBackingValue !== previousBackingValue &&
         currentBackingValue.getIn(listenerPathAsArray) !== previousBackingValue.getIn(listenerPathAsArray);
-      var metaChanged = stateTransition.metaMetaChanged || (
-        previousBackingMeta && currentBackingMeta !== previousBackingMeta &&
+      var metaChanged =
+        stateTransition.metaMetaChanged ||
+        (previousBackingMeta &&
+          currentBackingMeta !== previousBackingMeta &&
           currentBackingMeta.getIn(listenerPathAsArray) !== previousBackingMeta.getIn(listenerPathAsArray));
 
       if (valueChanged || metaChanged) {
         listenerDescriptor.cb(
-          new ChangesDescriptor(
-            path, listenerPathAsArray, valueChanged, metaChanged, stateTransition
-          )
+          new ChangesDescriptor(path, listenerPathAsArray, valueChanged, metaChanged, stateTransition)
         );
       }
     }
   });
 };
 
-notifyGlobalListeners = function (self, path, stateTransition) {
+notifyGlobalListeners = function(self, path, stateTransition) {
   var listeners = self._sharedInternals.listeners;
   var globalListeners = listeners[''];
   if (globalListeners) {
@@ -21264,33 +21089,39 @@ notifyGlobalListeners = function (self, path, stateTransition) {
   }
 };
 
-startsWith = function (s1, s2) {
+startsWith = function(s1, s2) {
   return s1.indexOf(s2) === 0;
 };
 
-isPathAffected = function (listenerPath, changedPath) {
-  return changedPath === '' || listenerPath === changedPath ||
-    startsWith(changedPath, listenerPath + PATH_SEPARATOR) || startsWith(listenerPath, changedPath + PATH_SEPARATOR);
+isPathAffected = function(listenerPath, changedPath) {
+  return (
+    changedPath === '' ||
+    listenerPath === changedPath ||
+    startsWith(changedPath, listenerPath + PATH_SEPARATOR) ||
+    startsWith(listenerPath, changedPath + PATH_SEPARATOR)
+  );
 };
 
-notifyNonGlobalListeners = function (self, path, stateTransition) {
+notifyNonGlobalListeners = function(self, path, stateTransition) {
   var listeners = self._sharedInternals.listeners;
-  Object.keys(listeners).filter(Util.identity).forEach(function (listenerPath) {
-    if (isPathAffected(listenerPath, asStringPath(path))) {
-      notifyListeners(self, listeners[listenerPath], listenerPath, path, stateTransition);
-    }
-  });
+  Object.keys(listeners)
+    .filter(Util.identity)
+    .forEach(function(listenerPath) {
+      if (isPathAffected(listenerPath, asStringPath(path))) {
+        notifyListeners(self, listeners[listenerPath], listenerPath, path, stateTransition);
+      }
+    });
 };
 
-notifyAllListeners = function (self, path, stateTransition) {
+notifyAllListeners = function(self, path, stateTransition) {
   notifyGlobalListeners(self, path, stateTransition);
   notifyNonGlobalListeners(self, path, stateTransition);
 };
 
 var linkMeta, unlinkMeta;
 
-linkMeta = function (self, metaBinding) {
-  self._sharedInternals.metaBindingListenerId = metaBinding.addListener(function (changes) {
+linkMeta = function(self, metaBinding) {
+  self._sharedInternals.metaBindingListenerId = metaBinding.addListener(function(changes) {
     var metaNodePath = changes.getPath();
     var changedPath = metaNodePath.slice(0, metaNodePath.length - 1);
 
@@ -21299,13 +21130,14 @@ linkMeta = function (self, metaBinding) {
     var previousBackingMeta = metaMetaChanged ? getBackingValue(metaBinding) : changes.getPreviousValue();
 
     notifyAllListeners(
-      self, changedPath,
+      self,
+      changedPath,
       mkStateTransition(backingValue, backingValue, getBackingValue(metaBinding), previousBackingMeta, metaMetaChanged)
     );
   });
 };
 
-unlinkMeta = function (self, metaBinding) {
+unlinkMeta = function(self, metaBinding) {
   var removed = metaBinding.removeListener(self._sharedInternals.metaBindingListenerId);
   self._sharedInternals.metaBinding = null;
   self._sharedInternals.metaBindingListenerId = null;
@@ -21314,14 +21146,13 @@ unlinkMeta = function (self, metaBinding) {
 
 var findSamePathListeners, setListenerDisabled;
 
-findSamePathListeners = function (self, listenerId) {
-  return Util.find(
-    Util.getPropertyValues(self._sharedInternals.listeners),
-    function (samePathListeners) { return !!samePathListeners[listenerId]; }
-  );
+findSamePathListeners = function(self, listenerId) {
+  return Util.find(Util.getPropertyValues(self._sharedInternals.listeners), function(samePathListeners) {
+    return !!samePathListeners[listenerId];
+  });
 };
 
-setListenerDisabled = function (self, listenerId, disabled) {
+setListenerDisabled = function(self, listenerId, disabled) {
   var samePathListeners = findSamePathListeners(self, listenerId);
   if (samePathListeners) {
     samePathListeners[listenerId].disabled = disabled;
@@ -21330,24 +21161,26 @@ setListenerDisabled = function (self, listenerId, disabled) {
 
 var update, delete_;
 
-update = function (self, subpath, f) {
+update = function(self, subpath, f) {
   var previousBackingValue = getBackingValue(self);
   var affectedPath = updateValue(self, asArrayPath(subpath), f);
   var backingMeta = getBackingValue(self.meta());
 
   notifyAllListeners(
-    self, affectedPath,
+    self,
+    affectedPath,
     mkStateTransition(getBackingValue(self), previousBackingValue, backingMeta, backingMeta)
   );
 };
 
-delete_ = function (self, subpath) {
+delete_ = function(self, subpath) {
   var previousBackingValue = getBackingValue(self);
   var affectedPath = removeValue(self, asArrayPath(subpath));
   var backingMeta = getBackingValue(self.meta());
 
   notifyAllListeners(
-    self, affectedPath,
+    self,
+    affectedPath,
     mkStateTransition(getBackingValue(self), previousBackingValue, backingMeta, backingMeta)
   );
 };
@@ -21384,7 +21217,7 @@ delete_ = function (self, subpath) {
  *   <li>can perform multiple changes atomically in respect of listener notification.</li>
  * </ul>
  * @see Binding.init */
-var Binding = function (path, sharedInternals) {
+var Binding = function(path, sharedInternals) {
   /** @private */
   this._path = path || EMPTY_PATH;
 
@@ -21409,10 +21242,10 @@ var Binding = function (path, sharedInternals) {
  * @param {Immutable.Map} [backingValue] backing value, empty map if omitted
  * @param {Binding} [metaBinding] meta binding
  * @return {Binding} fresh binding instance */
-Binding.init = function (backingValue, metaBinding) {
+Binding.init = function(backingValue, metaBinding) {
   var binding = new Binding(EMPTY_PATH, {
     backingValue: backingValue || Imm.Map(),
-    metaBinding: metaBinding
+    metaBinding: metaBinding,
   });
 
   if (metaBinding) {
@@ -21425,14 +21258,14 @@ Binding.init = function (backingValue, metaBinding) {
 /** Convert string path to array path.
  * @param {String} pathAsString path as string
  * @return {Array} path as an array */
-Binding.asArrayPath = function (pathAsString) {
+Binding.asArrayPath = function(pathAsString) {
   return asArrayPath(pathAsString);
 };
 
 /** Convert array path to string path.
  * @param {String[]} pathAsAnArray path as an array
  * @return {String} path as a string */
-Binding.asStringPath = function (pathAsAnArray) {
+Binding.asStringPath = function(pathAsAnArray) {
   return asStringPath(pathAsAnArray);
 };
 
@@ -21443,17 +21276,16 @@ Binding.META_NODE = Util.META_NODE;
 
 /** @lends Binding.prototype */
 var bindingPrototype = {
-
   /** Get binding path.
    * @returns {Array} binding path */
-  getPath: function () {
+  getPath: function() {
     return this._path;
   },
 
   /** Update backing value.
    * @param {Immutable.Map} newBackingValue new backing value
    * @return {Binding} new binding instance, original is unaffected */
-  withBackingValue: function (newBackingValue) {
+  withBackingValue: function(newBackingValue) {
     var newSharedInternals = {};
     Util.assign(newSharedInternals, this._sharedInternals);
     newSharedInternals.backingValue = newBackingValue;
@@ -21463,27 +21295,29 @@ var bindingPrototype = {
   /** Check if binding value is changed in alternative backing value.
    * @param {Immutable.Map} alternativeBackingValue alternative backing value
    * @param {Function} [compare] alternative compare function, does reference equality check if omitted */
-  isChanged: function (alternativeBackingValue, compare) {
+  isChanged: function(alternativeBackingValue, compare) {
     var value = this.get();
     var alternativeValue = alternativeBackingValue ? alternativeBackingValue.getIn(this._path) : undefined;
-    return compare ?
-        !compare(value, alternativeValue) :
-        !(value === alternativeValue || (Util.undefinedOrNull(value) && Util.undefinedOrNull(alternativeValue)));
+    return compare
+      ? !compare(value, alternativeValue)
+      : !(value === alternativeValue || (Util.undefinedOrNull(value) && Util.undefinedOrNull(alternativeValue)));
   },
 
   /** Check if this and supplied binding are relatives (i.e. share same backing value).
    * @param {Binding} otherBinding potential relative
    * @return {Boolean} */
-  isRelative: function (otherBinding) {
-    return this._sharedInternals === otherBinding._sharedInternals &&
-      this._sharedInternals.backingValue === otherBinding._sharedInternals.backingValue;
+  isRelative: function(otherBinding) {
+    return (
+      this._sharedInternals === otherBinding._sharedInternals &&
+      this._sharedInternals.backingValue === otherBinding._sharedInternals.backingValue
+    );
   },
 
   /** Get binding's meta binding.
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers;
    *                                 b.meta('path') is equivalent to b.meta().sub('path')
    * @returns {Binding} meta binding or undefined */
-  meta: function (subpath) {
+  meta: function(subpath) {
     if (!this._sharedInternals.metaBinding) {
       var metaBinding = Binding.init(Imm.Map());
       linkMeta(this, metaBinding);
@@ -21499,7 +21333,7 @@ var bindingPrototype = {
   /** Unlink this binding's meta binding, removing change listener and making them totally independent.
    * May be used to prevent memory leaks when appropriate.
    * @return {Boolean} true if binding's meta binding was unlinked */
-  unlinkMeta: function () {
+  unlinkMeta: function() {
     var metaBinding = this._sharedInternals.metaBinding;
     return metaBinding ? unlinkMeta(this, metaBinding) : false;
   },
@@ -21507,14 +21341,14 @@ var bindingPrototype = {
   /** Get binding value.
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @return {*} value at path or null */
-  get: function (subpath) {
+  get: function(subpath) {
     return getValueAtPath(getBackingValue(this), Util.joinPaths(this._path, asArrayPath(subpath)));
   },
 
   /** Convert to JS representation.
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @return {*} JS representation of data at subpath */
-  toJS: function (subpath) {
+  toJS: function(subpath) {
     var value = this.sub(subpath).get();
     return Imm.Iterable.isIterable(value) ? value.toJS() : value;
   },
@@ -21522,7 +21356,7 @@ var bindingPrototype = {
   /** Bind to subpath. Both bindings share the same backing value. Changes are mutually visible.
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @return {Binding} new binding instance, original is unaffected */
-  sub: function (subpath) {
+  sub: function(subpath) {
     var pathAsArray = asArrayPath(subpath);
     var absolutePath = Util.joinPaths(this._path, pathAsArray);
     if (absolutePath.length > 0) {
@@ -21545,7 +21379,7 @@ var bindingPrototype = {
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @param {Function} f update function
    * @return {Binding} this binding */
-  update: function (subpath, f) {
+  update: function(subpath, f) {
     var args = Util.resolveArgs(arguments, '?subpath', 'f');
     update(this, args.subpath, args.f);
     return this;
@@ -21555,7 +21389,7 @@ var bindingPrototype = {
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @param {*} newValue new value
    * @return {Binding} this binding */
-  set: function (subpath, newValue) {
+  set: function(subpath, newValue) {
     var args = Util.resolveArgs(arguments, '?subpath', 'newValue');
     update(this, args.subpath, Util.constantly(args.newValue));
     return this;
@@ -21564,7 +21398,7 @@ var bindingPrototype = {
   /** Delete value.
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @return {Binding} this binding */
-  remove: function (subpath) {
+  remove: function(subpath) {
     delete_(this, subpath);
     return this;
   },
@@ -21574,10 +21408,12 @@ var bindingPrototype = {
    * @param {Boolean} [preserve=false] preserve existing values when merging
    * @param {*} newValue new value
    * @return {Binding} this binding */
-  merge: function (subpath, preserve, newValue) {
+  merge: function(subpath, preserve, newValue) {
     var args = Util.resolveArgs(
       arguments,
-      function (x) { return Util.canRepresentSubpath(x) ? 'subpath' : null; },
+      function(x) {
+        return Util.canRepresentSubpath(x) ? 'subpath' : null;
+      },
       '?preserve',
       'newValue'
     );
@@ -21588,7 +21424,7 @@ var bindingPrototype = {
   /** Clear nested collection. Does '.clear()' on Immutable values, nullifies otherwise.
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @return {Binding} this binding */
-  clear: function (subpath) {
+  clear: function(subpath) {
     var subpathAsArray = asArrayPath(subpath);
     if (!Util.undefinedOrNull(this.get(subpathAsArray))) {
       update(this, subpathAsArray, clear);
@@ -21601,9 +21437,13 @@ var bindingPrototype = {
    * @param {Function} cb function receiving changes descriptor
    * @return {String} unique id which should be used to un-register the listener
    * @see ChangesDescriptor */
-  addListener: function (subpath, cb) {
+  addListener: function(subpath, cb) {
     var args = Util.resolveArgs(
-      arguments, function (x) { return Util.canRepresentSubpath(x) ? 'subpath' : null; }, 'cb'
+      arguments,
+      function(x) {
+        return Util.canRepresentSubpath(x) ? 'subpath' : null;
+      },
+      'cb'
     );
 
     var listenerId = generateListenerId();
@@ -21625,13 +21465,17 @@ var bindingPrototype = {
    * @param {Function} cb function receiving changes descriptor
    * @return {String} unique id which should be used to un-register the listener
    * @see ChangesDescriptor */
-  addOnceListener: function (subpath, cb) {
+  addOnceListener: function(subpath, cb) {
     var args = Util.resolveArgs(
-      arguments, function (x) { return Util.canRepresentSubpath(x) ? 'subpath' : null; }, 'cb'
+      arguments,
+      function(x) {
+        return Util.canRepresentSubpath(x) ? 'subpath' : null;
+      },
+      'cb'
     );
 
     var self = this;
-    var listenerId = self.addListener(args.subpath, function () {
+    var listenerId = self.addListener(args.subpath, function() {
       self.removeListener(listenerId);
       args.cb();
     });
@@ -21641,7 +21485,7 @@ var bindingPrototype = {
   /** Enable listener.
    * @param {String} listenerId listener id
    * @return {Binding} this binding */
-  enableListener: function (listenerId) {
+  enableListener: function(listenerId) {
     setListenerDisabled(this, listenerId, false);
     return this;
   },
@@ -21649,7 +21493,7 @@ var bindingPrototype = {
   /** Disable listener.
    * @param {String} listenerId listener id
    * @return {Binding} this binding */
-  disableListener: function (listenerId) {
+  disableListener: function(listenerId) {
     setListenerDisabled(this, listenerId, true);
     return this;
   },
@@ -21658,12 +21502,14 @@ var bindingPrototype = {
    * @param {String} listenerId listener id
    * @param {Function} f function to execute
    * @return {Binding} this binding */
-  withDisabledListener: function (listenerId, f) {
+  withDisabledListener: function(listenerId, f) {
     var samePathListeners = findSamePathListeners(this, listenerId);
     if (samePathListeners) {
       var descriptor = samePathListeners[listenerId];
       descriptor.disabled = true;
-      Util.afterComplete(f, function () { descriptor.disabled = false; });
+      Util.afterComplete(f, function() {
+        descriptor.disabled = false;
+      });
     } else {
       f();
     }
@@ -21673,7 +21519,7 @@ var bindingPrototype = {
   /** Un-register the listener.
    * @param {String} listenerId listener id
    * @return {Boolean} true if listener removed successfully, false otherwise */
-  removeListener: function (listenerId) {
+  removeListener: function(listenerId) {
     var samePathListeners = findSamePathListeners(this, listenerId);
     return samePathListeners ? delete samePathListeners[listenerId] : false;
   },
@@ -21683,10 +21529,9 @@ var bindingPrototype = {
    * cancelled and reverted (if already committed) on promise failure.
    * @param {Promise} [promise] ES6 promise
    * @return {TransactionContext} transaction context */
-  atomically: function (promise) {
+  atomically: function(promise) {
     return new TransactionContext(this, promise);
-  }
-
+  },
 };
 
 bindingPrototype['delete'] = bindingPrototype.remove;
@@ -21699,7 +21544,7 @@ Binding.prototype = bindingPrototype;
  * @public
  * @class TransactionContext
  * @classdesc Transaction context. */
-var TransactionContext = function (binding, promise) {
+var TransactionContext = function(binding, promise) {
   /** @private */
   this._binding = binding;
 
@@ -21720,7 +21565,7 @@ var TransactionContext = function (binding, promise) {
 
   if (promise) {
     var self = this;
-    promise.then(Util.identity, function () {
+    promise.then(Util.identity, function() {
       if (!self.isCancelled()) {
         self.cancel();
       }
@@ -21728,16 +21573,15 @@ var TransactionContext = function (binding, promise) {
   }
 };
 
-TransactionContext.prototype = (function () {
-
+TransactionContext.prototype = (function() {
   var UPDATE_TYPE = Object.freeze({
     UPDATE: 'update',
-    DELETE: 'delete'
+    DELETE: 'delete',
   });
 
   var registerUpdate, hasChanges;
 
-  registerUpdate = function (self, binding) {
+  registerUpdate = function(self, binding) {
     if (!self._hasChanges) {
       self._hasChanges = binding.isRelative(self._binding);
     }
@@ -21747,37 +21591,39 @@ TransactionContext.prototype = (function () {
     }
   };
 
-  hasChanges = function (self) {
+  hasChanges = function(self) {
     return self._hasChanges || self._hasMetaChanges;
   };
 
   var addUpdate, addDeletion, areSiblings, filterRedundantPaths, commitSilently;
 
-  addUpdate = function (self, binding, update, subpath) {
+  addUpdate = function(self, binding, update, subpath) {
     registerUpdate(self, binding);
     self._queuedUpdates.push({ binding: binding, update: update, subpath: subpath, type: UPDATE_TYPE.UPDATE });
   };
 
-  addDeletion = function (self, binding, subpath) {
+  addDeletion = function(self, binding, subpath) {
     registerUpdate(self, binding);
     self._queuedUpdates.push({ binding: binding, subpath: subpath, type: UPDATE_TYPE.DELETE });
   };
 
-  areSiblings = function (path1, path2) {
-    var path1Length = path1.length, path2Length = path2.length;
-    return path1Length === path2Length &&
-      (path1Length === 1 || path1[path1Length - 2] === path2[path1Length - 2]);
+  areSiblings = function(path1, path2) {
+    var path1Length = path1.length,
+      path2Length = path2.length;
+    return path1Length === path2Length && (path1Length === 1 || path1[path1Length - 2] === path2[path1Length - 2]);
   };
 
-  filterRedundantPaths = function (affectedPaths) {
+  filterRedundantPaths = function(affectedPaths) {
     if (affectedPaths.length < 2) {
       return affectedPaths;
     } else {
       var sortedPaths = affectedPaths.sort();
-      var previousPath = sortedPaths[0], previousPathAsString = asStringPath(previousPath);
+      var previousPath = sortedPaths[0],
+        previousPathAsString = asStringPath(previousPath);
       var result = [previousPath];
       for (var i = 1; i < sortedPaths.length; i++) {
-        var currentPath = sortedPaths[i], currentPathAsString = asStringPath(currentPath);
+        var currentPath = sortedPaths[i],
+          currentPathAsString = asStringPath(currentPath);
         if (!startsWith(currentPathAsString, previousPathAsString)) {
           if (areSiblings(currentPath, previousPath)) {
             var commonParentPath = currentPath.slice(0, currentPath.length - 1);
@@ -21796,17 +21642,18 @@ TransactionContext.prototype = (function () {
     }
   };
 
-  commitSilently = function (self) {
-    var finishedUpdates = self._queuedUpdates.map(function (update) {
+  commitSilently = function(self) {
+    var finishedUpdates = self._queuedUpdates.map(function(update) {
       var previousBackingValue = getBackingValue(update.binding);
-      var affectedPath = update.type === UPDATE_TYPE.UPDATE ?
-        updateValue(update.binding, update.subpath, update.update) :
-        removeValue(update.binding, update.subpath);
+      var affectedPath =
+        update.type === UPDATE_TYPE.UPDATE
+          ? updateValue(update.binding, update.subpath, update.update)
+          : removeValue(update.binding, update.subpath);
 
       return {
         affectedPath: affectedPath,
         binding: update.binding,
-        previousBackingValue: previousBackingValue
+        previousBackingValue: previousBackingValue,
       };
     });
 
@@ -21816,18 +21663,19 @@ TransactionContext.prototype = (function () {
     return finishedUpdates;
   };
 
-  var revert = function (self) {
+  var revert = function(self) {
     var finishedUpdates = self._finishedUpdates;
     if (finishedUpdates.length > 0) {
       var tx = self._binding.atomically();
 
-      for (var i = finishedUpdates.length; i-- > 0;) {
+      for (var i = finishedUpdates.length; i-- > 0; ) {
         var update = finishedUpdates[i];
-        var binding = update.binding, affectedPath = update.affectedPath;
+        var binding = update.binding,
+          affectedPath = update.affectedPath;
         var relativeAffectedPath =
-          binding.getPath().length === affectedPath.length ?
-            affectedPath :
-            affectedPath.slice(binding.getPath().length);
+          binding.getPath().length === affectedPath.length
+            ? affectedPath
+            : affectedPath.slice(binding.getPath().length);
 
         tx.set(binding, relativeAffectedPath, update.previousBackingValue.getIn(affectedPath));
       }
@@ -21838,7 +21686,7 @@ TransactionContext.prototype = (function () {
     self._finishedUpdates = null;
   };
 
-  var cancel = function (self) {
+  var cancel = function(self) {
     if (self.isCommitted()) {
       revert(self);
     }
@@ -21848,16 +21696,19 @@ TransactionContext.prototype = (function () {
 
   /** @lends TransactionContext.prototype */
   var transactionContextPrototype = {
-
     /** Update binding value.
      * @param {Binding} [binding] binding to apply update to
      * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
      * @param {Function} f update function
      * @return {TransactionContext} updated transaction */
-    update: function (binding, subpath, f) {
+    update: function(binding, subpath, f) {
       var args = Util.resolveArgs(
         arguments,
-        function (x) { return x instanceof Binding ? 'binding' : null; }, '?subpath', 'f'
+        function(x) {
+          return x instanceof Binding ? 'binding' : null;
+        },
+        '?subpath',
+        'f'
       );
       addUpdate(this, args.binding || this._binding, args.f, asArrayPath(args.subpath));
       return this;
@@ -21868,10 +21719,14 @@ TransactionContext.prototype = (function () {
      * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
      * @param {*} newValue new value
      * @return {TransactionContext} updated transaction context */
-    set: function (binding, subpath, newValue) {
+    set: function(binding, subpath, newValue) {
       var args = Util.resolveArgs(
         arguments,
-        function (x) { return x instanceof Binding ? 'binding' : null; }, '?subpath', 'newValue'
+        function(x) {
+          return x instanceof Binding ? 'binding' : null;
+        },
+        '?subpath',
+        'newValue'
       );
       return this.update(args.binding, args.subpath, Util.constantly(args.newValue));
     },
@@ -21880,10 +21735,13 @@ TransactionContext.prototype = (function () {
      * @param {Binding} [binding] binding to apply update to
      * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
      * @return {TransactionContext} updated transaction context */
-    remove: function (binding, subpath) {
+    remove: function(binding, subpath) {
       var args = Util.resolveArgs(
         arguments,
-        function (x) { return x instanceof Binding ? 'binding' : null; }, '?subpath'
+        function(x) {
+          return x instanceof Binding ? 'binding' : null;
+        },
+        '?subpath'
       );
       addDeletion(this, args.binding || this._binding, asArrayPath(args.subpath));
       return this;
@@ -21895,12 +21753,18 @@ TransactionContext.prototype = (function () {
      * @param {Boolean} [preserve=false] preserve existing values when merging
      * @param {*} newValue new value
      * @return {TransactionContext} updated transaction context */
-    merge: function (binding, subpath, preserve, newValue) {
+    merge: function(binding, subpath, preserve, newValue) {
       var args = Util.resolveArgs(
         arguments,
-        function (x) { return x instanceof Binding ? 'binding' : null; },
-        function (x) { return Util.canRepresentSubpath(x) ? 'subpath' : null; },
-        function (x) { return typeof x === 'boolean' ? 'preserve' : null; },
+        function(x) {
+          return x instanceof Binding ? 'binding' : null;
+        },
+        function(x) {
+          return Util.canRepresentSubpath(x) ? 'subpath' : null;
+        },
+        function(x) {
+          return typeof x === 'boolean' ? 'preserve' : null;
+        },
         'newValue'
       );
       return this.update(args.binding, args.subpath, merge.bind(null, args.preserve, args.newValue));
@@ -21910,10 +21774,13 @@ TransactionContext.prototype = (function () {
      * @param {Binding} [binding] binding to apply update to
      * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
      * @return {TransactionContext} updated transaction context */
-    clear: function (binding, subpath) {
+    clear: function(binding, subpath) {
       var args = Util.resolveArgs(
         arguments,
-        function (x) { return x instanceof Binding ? 'binding' : null; }, '?subpath'
+        function(x) {
+          return x instanceof Binding ? 'binding' : null;
+        },
+        '?subpath'
       );
       addUpdate(this, args.binding || this._binding, clear, asArrayPath(args.subpath));
       return this;
@@ -21923,31 +21790,37 @@ TransactionContext.prototype = (function () {
      * @param {Object} [options] options object
      * @param {Boolean} [options.notify=true] should listeners be notified
      * @return {TransactionContext} updated transaction context */
-    commit: function (options) {
+    commit: function(options) {
       if (!this.isCommitted()) {
         if (!this.isCancelled() && hasChanges(this)) {
           var effectiveOptions = options || {};
           var binding = this._binding;
           var metaBinding = binding.meta();
 
-          var previousBackingValue = null, previousBackingMeta = null;
+          var previousBackingValue = null,
+            previousBackingMeta = null;
           if (effectiveOptions.notify !== false) {
             previousBackingValue = getBackingValue(binding);
             previousBackingMeta = getBackingValue(metaBinding);
           }
 
           this._finishedUpdates = commitSilently(this);
-          var affectedPaths = this._finishedUpdates.map(function (update) { return update.affectedPath; });
+          var affectedPaths = this._finishedUpdates.map(function(update) {
+            return update.affectedPath;
+          });
 
           if (effectiveOptions.notify !== false) {
             var filteredPaths = filterRedundantPaths(affectedPaths);
 
             var stateTransition = mkStateTransition(
-              getBackingValue(binding), previousBackingValue, getBackingValue(metaBinding), previousBackingMeta
+              getBackingValue(binding),
+              previousBackingValue,
+              getBackingValue(metaBinding),
+              previousBackingMeta
             );
 
             notifyGlobalListeners(binding, filteredPaths[0], stateTransition);
-            filteredPaths.forEach(function (path) {
+            filteredPaths.forEach(function(path) {
               notifyNonGlobalListeners(binding, path, stateTransition);
             });
           }
@@ -21963,7 +21836,7 @@ TransactionContext.prototype = (function () {
      * Committing cancelled transaction won't have any effect.
      * For committed transactions affected paths will be reverted to original values,
      * overwriting any changes made after transaction has been committed. */
-    cancel: function () {
+    cancel: function() {
       if (!this.isCancelled()) {
         cancel(this);
       } else {
@@ -21973,16 +21846,15 @@ TransactionContext.prototype = (function () {
 
     /** Check if transaction was committed.
      * @return {Boolean} committed flag */
-    isCommitted: function () {
+    isCommitted: function() {
       return this._committed;
     },
 
     /** Check if transaction was cancelled, either manually or due to promise failure.
      * @return {Boolean} cancelled flag */
-    isCancelled: function () {
+    isCancelled: function() {
       return this._cancelled;
-    }
-
+    },
   };
 
   transactionContextPrototype['delete'] = transactionContextPrototype.remove;
@@ -21993,7 +21865,7 @@ TransactionContext.prototype = (function () {
 module.exports = Binding;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ChangesDescriptor":33,"./Util":37}],33:[function(require,module,exports){
+},{"./ChangesDescriptor":41,"./Util":45}],41:[function(require,module,exports){
 var Util = require('./Util');
 
 /** Changes descriptor constructor.
@@ -22009,7 +21881,7 @@ var Util = require('./Util');
  * @public
  * @class ChangesDescriptor
  * @classdesc Encapsulates binding changes for binding listeners. */
-var ChangesDescriptor = function (path, listenerPath, valueChanged, metaChanged, stateTransition) {
+var ChangesDescriptor = function(path, listenerPath, valueChanged, metaChanged, stateTransition) {
   /** @private */
   this._path = path;
   /** @private */
@@ -22035,74 +21907,71 @@ var ChangesDescriptor = function (path, listenerPath, valueChanged, metaChanged,
 
 /** @lends ChangesDescriptor.prototype */
 ChangesDescriptor.prototype = {
-
   /** Get changed path relative to binding's path listener was installed on.
    * @return {Array} changed path */
-  getPath: function () {
+  getPath: function() {
     var listenerPathLen = this._listenerPath.length;
     return listenerPathLen === this._path.length ? [] : this._path.slice(listenerPathLen);
   },
 
   /** Check if binding's value was changed.
    * @returns {Boolean} */
-  isValueChanged: function () {
+  isValueChanged: function() {
     return this._valueChanged;
   },
 
   /** Check if meta binding's value was changed.
    * @returns {Boolean} */
-  isMetaChanged: function () {
+  isMetaChanged: function() {
     return this._metaChanged;
   },
 
   /** Get current value at listening path.
    * @returns {*} current value at listening path */
-  getCurrentValue: function () {
+  getCurrentValue: function() {
     return this._currentBackingValue.getIn(this._listenerPath);
   },
 
   /** Get previous value at listening path.
    * @returns {*} previous value at listening path */
-  getPreviousValue: function () {
+  getPreviousValue: function() {
     return this._previousBackingValue.getIn(this._listenerPath);
   },
 
   /** Get current meta at listening path.
    * @returns {*} current meta value at listening path */
-  getCurrentMeta: function () {
+  getCurrentMeta: function() {
     return this._currentBackingMeta ? this._currentBackingMeta.getIn(this._metaPath) : null;
   },
 
   /** Get previous meta at listening path.
    * @returns {*} current meta value at listening path */
-  getPreviousMeta: function () {
+  getPreviousMeta: function() {
     return this._previousBackingMeta ? this._previousBackingMeta.getIn(this._metaPath) : null;
   },
 
   /** Get previous backing value.
    * @protected
    * @returns {*} */
-  getPreviousBackingValue: function () {
+  getPreviousBackingValue: function() {
     return this._previousBackingValue;
   },
 
   /** Get previous backing meta value.
    * @protected
    * @returns {*} */
-  getPreviousBackingMeta: function () {
+  getPreviousBackingMeta: function() {
     return this._previousBackingMeta || null;
-  }
-
+  },
 };
 
 module.exports = ChangesDescriptor;
 
-},{"./Util":37}],34:[function(require,module,exports){
+},{"./Util":45}],42:[function(require,module,exports){
 (function (global){
 var Util = require('./Util');
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var ReactDOM = require('react-dom');
-var DOMFactories = require('react-dom-factories');
 var createReactClass = require('create-react-class');
 
 var _ = (function() {
@@ -22143,91 +22012,118 @@ var wrapComponent = function(comp, displayName) {
   });
 };
 
+function createDOMFactory(type) {
+  var factory = _.bind(null, type);
+  // Expose the type on the factory and the prototype so that it can be
+  // easily accessed on elements. E.g. `<Foo />.type === Foo`.
+  // This should not be named `constructor` since this may not be the function
+  // that created the element, and it may not even be a constructor.
+  factory.type = type;
+  return factory;
+}
+
 /**
  * @name DOM
  * @namespace
  * @classdesc DOM module. Exposes requestAnimationFrame-friendly wrappers around input, textarea, and option.
  */
 var DOM = {
-  input: wrapComponent(DOMFactories.input, 'input'),
+  input: wrapComponent(createDOMFactory('input'), 'input'),
 
-  textarea: wrapComponent(DOMFactories.textarea, 'textarea'),
+  textarea: wrapComponent(createDOMFactory('textarea'), 'textarea'),
 
-  option: wrapComponent(DOMFactories.option, 'option'),
+  option: wrapComponent(createDOMFactory('option'), 'option'),
 };
 
 module.exports = DOM;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Util":37,"create-react-class":3,"react-dom":28,"react-dom-factories":25}],35:[function(require,module,exports){
+},{"./Util":45,"create-react-class":3,"react-dom":36}],43:[function(require,module,exports){
 (function (global){
 var Imm = (typeof window !== "undefined" ? window['Immutable'] : typeof global !== "undefined" ? global['Immutable'] : null);
 var Binding = require('./Binding');
 
 var getHistoryBinding, initHistory, clearHistory, destroyHistory, listenForChanges, revertToStep, revert;
 
-getHistoryBinding = function (binding) {
+getHistoryBinding = function(binding) {
   return binding.meta('history');
 };
 
-initHistory = function (historyBinding) {
+initHistory = function(historyBinding) {
   historyBinding.set(Imm.fromJS({ listenerId: null, undo: [], redo: [] }));
 };
 
-clearHistory = function (historyBinding) {
+clearHistory = function(historyBinding) {
   var listenerId = historyBinding.get('listenerId');
-  historyBinding.withDisabledListener(listenerId, function () {
-    historyBinding.atomically()
+  historyBinding.withDisabledListener(listenerId, function() {
+    historyBinding
+      .atomically()
       .set('undo', Imm.List.of())
       .set('redo', Imm.List.of())
       .commit();
   });
 };
 
-destroyHistory = function (binding, notify) {
+destroyHistory = function(binding, notify) {
   var historyBinding = getHistoryBinding(binding);
   var listenerId = historyBinding.get('listenerId');
   binding.removeListener(listenerId);
-  historyBinding.atomically().set(null).commit({ notify: notify });
+  historyBinding
+    .atomically()
+    .set(null)
+    .commit({ notify: notify });
 };
 
-listenForChanges = function (binding, historyBinding) {
-  var listenerId = binding.addListener([], function (changes) {
+listenForChanges = function(binding, historyBinding) {
+  var listenerId = binding.addListener([], function(changes) {
     if (changes.isValueChanged()) {
-      historyBinding.atomically().update(function (history) {
-        var path = changes.getPath();
-        var previousValue = changes.getPreviousValue(), newValue = binding.get();
-        return history
-          .update('undo', function (undo) {
-            var pathAsArray = Binding.asArrayPath(path);
-            return undo && undo.unshift(Imm.Map({
-              newValue: pathAsArray.length ? newValue.getIn(pathAsArray) : newValue,
-              oldValue: pathAsArray.length ? previousValue && previousValue.getIn(pathAsArray) : previousValue,
-              path: path
-            }));
-          })
-          .set('redo', Imm.List.of());
-      }).commit({ notify: false });
+      historyBinding
+        .atomically()
+        .update(function(history) {
+          var path = changes.getPath();
+          var previousValue = changes.getPreviousValue(),
+            newValue = binding.get();
+          return history
+            .update('undo', function(undo) {
+              var pathAsArray = Binding.asArrayPath(path);
+              return (
+                undo &&
+                undo.unshift(
+                  Imm.Map({
+                    newValue: pathAsArray.length ? newValue.getIn(pathAsArray) : newValue,
+                    oldValue: pathAsArray.length ? previousValue && previousValue.getIn(pathAsArray) : previousValue,
+                    path: path,
+                  })
+                )
+              );
+            })
+            .set('redo', Imm.List.of());
+        })
+        .commit({ notify: false });
     }
   });
 
-  historyBinding.atomically().set('listenerId', listenerId).commit({ notify: false });
+  historyBinding
+    .atomically()
+    .set('listenerId', listenerId)
+    .commit({ notify: false });
 };
 
-revertToStep = function (path, value, listenerId, binding) {
-  binding.withDisabledListener(listenerId, function () {
+revertToStep = function(path, value, listenerId, binding) {
+  binding.withDisabledListener(listenerId, function() {
     binding.set(path, value);
   });
 };
 
-revert = function (binding, fromBinding, toBinding, listenerId, valueProperty) {
+revert = function(binding, fromBinding, toBinding, listenerId, valueProperty) {
   var from = fromBinding.get();
   if (!from.isEmpty()) {
     var step = from.get(0);
 
-    fromBinding.atomically()
+    fromBinding
+      .atomically()
       .remove(0)
-      .update(toBinding, function (to) {
+      .update(toBinding, function(to) {
         return to.unshift(step);
       })
       .commit({ notify: false });
@@ -22239,18 +22135,16 @@ revert = function (binding, fromBinding, toBinding, listenerId, valueProperty) {
   }
 };
 
-
 /**
  * @name History
  * @namespace
  * @classdesc Undo/redo history handling.
  */
 var History = {
-
   /** Init history.
    * @param {Binding} binding binding
    * @memberOf History */
-  init: function (binding) {
+  init: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     initHistory(historyBinding);
     listenForChanges(binding, historyBinding);
@@ -22259,7 +22153,7 @@ var History = {
   /** Clear history.
    * @param {Binding} binding binding
    * @memberOf History */
-  clear: function (binding) {
+  clear: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     clearHistory(historyBinding);
   },
@@ -22269,7 +22163,7 @@ var History = {
    * @param {Object} [options] options object
    * @param {Boolean} [options.notify=true] should listeners be notified
    * @memberOf History */
-  destroy: function (binding, options) {
+  destroy: function(binding, options) {
     var effectiveOptions = options || {};
     destroyHistory(binding, effectiveOptions.notify);
   },
@@ -22278,7 +22172,7 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean}
    * @memberOf History */
-  hasUndo: function (binding) {
+  hasUndo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var undo = historyBinding.get('undo');
     return !!undo && !undo.isEmpty();
@@ -22288,7 +22182,7 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean}
    * @memberOf History */
-  hasRedo: function (binding) {
+  hasRedo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var redo = historyBinding.get('redo');
     return !!redo && !redo.isEmpty();
@@ -22298,7 +22192,7 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean} true, if binding has undo information
    * @memberOf History */
-  undo: function (binding) {
+  undo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var listenerId = historyBinding.get('listenerId');
     var undoBinding = historyBinding.sub('undo');
@@ -22310,20 +22204,19 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean} true, if binding has redo information
    * @memberOf History */
-  redo: function (binding) {
+  redo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var listenerId = historyBinding.get('listenerId');
     var undoBinding = historyBinding.sub('undo');
     var redoBinding = historyBinding.sub('redo');
     return revert(binding, redoBinding, undoBinding, listenerId, 'newValue');
-  }
-
+  },
 };
 
 module.exports = History;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Binding":32}],36:[function(require,module,exports){
+},{"./Binding":40}],44:[function(require,module,exports){
 (function (global){
 /**
  * @name Morearty
@@ -22835,7 +22728,8 @@ module.exports = function(React, DOM) {
           if (stop) {
             self._stateBinding.removeListener(listenerId);
           } else {
-            var stateChanged = changes.isValueChanged(), metaChanged = changes.isMetaChanged();
+            var stateChanged = changes.isValueChanged(),
+              metaChanged = changes.isMetaChanged();
 
             if (stateChanged || metaChanged) {
               renderQueue.push({
@@ -22989,7 +22883,9 @@ module.exports = function(React, DOM) {
        * @return {*} previous component state value */
       getPreviousState: function(name) {
         var ctx = this.getMoreartyContext();
-        return getBinding(this.props, name).withBackingValue(ctx._previousState).get();
+        return getBinding(this.props, name)
+          .withBackingValue(ctx._previousState)
+          .get();
       },
 
       /** Consider specified binding for changes when rendering. Registering same binding twice has no effect.
@@ -23158,7 +23054,7 @@ module.exports = function(React, DOM) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Binding":32,"./History":35,"./Util":37,"./util/Callback":38,"create-react-class":3,"prop-types":23}],37:[function(require,module,exports){
+},{"./Binding":40,"./History":43,"./Util":45,"./util/Callback":46,"create-react-class":3,"prop-types":28}],45:[function(require,module,exports){
 /**
  * @name Util
  * @namespace
@@ -23173,11 +23069,11 @@ module.exports = function(React, DOM) {
 
 var isRequired, findTurningPoint, prepare;
 
-isRequired = function (spec) {
+isRequired = function(spec) {
   return typeof spec === 'string' && spec.charAt(0) !== '?';
 };
 
-findTurningPoint = function (arr, pred) {
+findTurningPoint = function(arr, pred) {
   var first = pred(arr[0]);
   for (var i = 1; i < arr.length; i++) {
     if (pred(arr[i]) !== first) return i;
@@ -23185,17 +23081,19 @@ findTurningPoint = function (arr, pred) {
   return null;
 };
 
-prepare = function (arr, splitAt) {
-  return arr.slice(splitAt).reverse().concat(arr.slice(0, splitAt));
+prepare = function(arr, splitAt) {
+  return arr
+    .slice(splitAt)
+    .reverse()
+    .concat(arr.slice(0, splitAt));
 };
 
 module.exports = {
-
   /** Identity function. Returns its first argument.
    * @param {*} x argument to return
    * @return {*} its first argument
    * @memberOf Util */
-  identity: function (x) {
+  identity: function(x) {
     return x;
   },
 
@@ -23203,7 +23101,7 @@ module.exports = {
    * @param {*} x argument
    * @returns {*} !x
    * @memberOf Util */
-  not: function (x) {
+  not: function(x) {
     return !x;
   },
 
@@ -23211,13 +23109,15 @@ module.exports = {
    * @param {*} x constant function return value
    * @return {Function} function always returning x
    * @memberOf Util */
-  constantly: function (x) {
-    return function () { return x; };
+  constantly: function(x) {
+    return function() {
+      return x;
+    };
   },
 
   /** Execute function asynchronously.
    * @param {Function} f function */
-  async: function (f) {
+  async: function(f) {
     setTimeout(f, 0);
   },
 
@@ -23225,7 +23125,7 @@ module.exports = {
    * @param {Function} f function to execute first
    * @param {Function} cont function to execute after f
    * @memberOf Util */
-  afterComplete: function (f, cont) {
+  afterComplete: function(f, cont) {
     var result = f();
     if (result && typeof result.always === 'function') {
       result.always(cont);
@@ -23238,7 +23138,7 @@ module.exports = {
    * @param {*} x argument to check
    * @returns {Boolean}
    * @memberOf Util */
-  undefinedOrNull: function (x) {
+  undefinedOrNull: function(x) {
     return x === undefined || x === null;
   },
 
@@ -23246,8 +23146,10 @@ module.exports = {
    * @param {Object} obj object
    * @return {Array} object's properties values
    * @memberOf Util */
-  getPropertyValues: function (obj) {
-    return Object.keys(obj).map(function (key) { return obj[key]; });
+  getPropertyValues: function(obj) {
+    return Object.keys(obj).map(function(key) {
+      return obj[key];
+    });
   },
 
   /** Find array element satisfying the predicate.
@@ -23255,7 +23157,7 @@ module.exports = {
    * @param {Function} pred predicate accepting current value, index, original array
    * @return {*} found value or null
    * @memberOf Util */
-  find: function (arr, pred) {
+  find: function(arr, pred) {
     for (var i = 0; i < arr.length; i++) {
       var value = arr[i];
       if (pred(value, i, arr)) {
@@ -23280,7 +23182,7 @@ module.exports = {
    * @param {*} var_args arguments specs as a var-args list or array, see method description
    * @returns {Object} arguments descriptor object
    * @memberOf Util */
-  resolveArgs: function (args, var_args) {
+  resolveArgs: function(args, var_args) {
     var result = {};
     if (arguments.length > 1) {
       var specs = Array.isArray(var_args) ? var_args : Array.prototype.slice.call(arguments, 1);
@@ -23296,14 +23198,18 @@ module.exports = {
         preparedArgs = prepare(effectiveArgs, effectiveArgs.length - (specs.length - turningPoint));
       }
 
-      for (var specIndex = 0, argIndex = 0;
-           specIndex < preparedSpecs.length && argIndex < preparedArgs.length; specIndex++) {
-        var spec = preparedSpecs[specIndex], arg = preparedArgs[argIndex];
+      for (
+        var specIndex = 0, argIndex = 0;
+        specIndex < preparedSpecs.length && argIndex < preparedArgs.length;
+        specIndex++
+      ) {
+        var spec = preparedSpecs[specIndex],
+          arg = preparedArgs[argIndex];
         if (isRequired(spec)) {
           result[spec] = arg;
           argIndex++;
         } else {
-          var name = typeof spec === 'function' ? spec(arg) : (spec.charAt(0) !== '?' ? spec : spec.substring(1));
+          var name = typeof spec === 'function' ? spec(arg) : spec.charAt(0) !== '?' ? spec : spec.substring(1);
           if (name || arg === undefined) {
             result[name] = arg;
             argIndex++;
@@ -23319,7 +23225,7 @@ module.exports = {
    * @param {*} x
    * @returns {Boolean}
    * @memberOf Util */
-  canRepresentSubpath: function (x) {
+  canRepresentSubpath: function(x) {
     var type = typeof x;
     return type === 'string' || type === 'number' || Array.isArray(x);
   },
@@ -23334,14 +23240,13 @@ module.exports = {
    * @param {Array} path2 array of string and numbers
    * @returns {Array} joined path
    * @memberOf Util */
-  joinPaths: function (path1, path2) {
-    return path1.length === 0 ? path2 :
-      (path2.length === 0 ? path1 : path1.concat(path2));
+  joinPaths: function(path1, path2) {
+    return path1.length === 0 ? path2 : path2.length === 0 ? path1 : path1.concat(path2);
   },
 
   /** ES6 Object.assign.
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign */
-  assign: function (target, firstSource) {
+  assign: function(target, firstSource) {
     if (target === undefined || target === null) {
       throw new TypeError('Cannot convert first argument to object');
     }
@@ -23353,16 +23258,14 @@ module.exports = {
 
     for (var i = 1; i < arguments.length; i++) {
       var nextSource = arguments[i];
-      if (nextSource === undefined || nextSource === null)
-        continue;
+      if (nextSource === undefined || nextSource === null) continue;
 
       var keysArray = Object.keys(Object(nextSource));
       for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
         var nextKey = keysArray[nextIndex];
         try {
           var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-          if (desc !== undefined && desc.enumerable)
-            to[nextKey] = nextSource[nextKey];
+          if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
         } catch (e) {
           if (!hasPendingException) {
             hasPendingException = true;
@@ -23371,15 +23274,13 @@ module.exports = {
         }
       }
 
-      if (hasPendingException)
-        throw pendingException;
+      if (hasPendingException) throw pendingException;
     }
     return to;
-  }
-
+  },
 };
 
-},{}],38:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /**
  * @name Callback
  * @namespace
@@ -23388,20 +23289,23 @@ module.exports = {
 var Util = require('../Util');
 
 module.exports = {
-
   /** Create callback used to set binding value on an event.
    * @param {Binding} binding binding
    * @param {String|Array} [subpath] subpath as a dot-separated string or an array of strings and numbers
    * @param {Function} [f] value transformer
    * @returns {Function} callback
    * @memberOf Callback */
-  set: function (binding, subpath, f) {
+  set: function(binding, subpath, f) {
     var args = Util.resolveArgs(
       arguments,
-      'binding', function (x) { return Util.canRepresentSubpath(x) ? 'subpath' : null; }, '?f'
+      'binding',
+      function(x) {
+        return Util.canRepresentSubpath(x) ? 'subpath' : null;
+      },
+      '?f'
     );
 
-    return function (event) {
+    return function(event) {
       var value = event.target.value;
       binding.set(args.subpath, args.f ? args.f(value) : value);
     };
@@ -23413,13 +23317,17 @@ module.exports = {
    * @param {Function} [pred] predicate
    * @returns {Function} callback
    * @memberOf Callback */
-  remove: function (binding, subpath, pred) {
+  remove: function(binding, subpath, pred) {
     var args = Util.resolveArgs(
       arguments,
-      'binding', function (x) { return Util.canRepresentSubpath(x) ? 'subpath' : null; }, '?pred'
+      'binding',
+      function(x) {
+        return Util.canRepresentSubpath(x) ? 'subpath' : null;
+      },
+      '?pred'
     );
 
-    return function (event) {
+    return function(event) {
       var value = event.target.value;
       if (!args.pred || args.pred(value)) {
         binding.remove(args.subpath);
@@ -23434,13 +23342,16 @@ module.exports = {
    * @param {Boolean} [ctrlKey] ctrl key flag
    * @returns {Function} callback
    * @memberOf Callback */
-  onKey: function (cb, key, shiftKey, ctrlKey) {
+  onKey: function(cb, key, shiftKey, ctrlKey) {
     var effectiveShiftKey = shiftKey || false;
     var effectiveCtrlKey = ctrlKey || false;
-    return function (event) {
-      var keyMatched = typeof key === 'string' ?
-        event.key === key :
-        Util.find(key, function (k) { return k === event.key; });
+    return function(event) {
+      var keyMatched =
+        typeof key === 'string'
+          ? event.key === key
+          : Util.find(key, function(k) {
+              return k === event.key;
+            });
 
       if (keyMatched && event.shiftKey === effectiveShiftKey && event.ctrlKey === effectiveCtrlKey) {
         cb(event);
@@ -23452,7 +23363,7 @@ module.exports = {
    * @param {Function} cb callback
    * @returns {Function} callback
    * @memberOf Callback */
-  onEnter: function (cb) {
+  onEnter: function(cb) {
     return this.onKey(cb, 'Enter');
   },
 
@@ -23460,13 +23371,12 @@ module.exports = {
    * @param {Function} cb callback
    * @returns {Function} callback
    * @memberOf Callback */
-  onEscape: function (cb) {
+  onEscape: function(cb) {
     return this.onKey(cb, 'Escape');
-  }
-
+  },
 };
 
 module.exports['delete'] = module.exports.remove;
 
-},{"../Util":37}]},{},[1])(1)
+},{"../Util":45}]},{},[1])(1)
 });
