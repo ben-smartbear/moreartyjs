@@ -13,7 +13,7 @@ var Util = require('./Util');
  * @public
  * @class ChangesDescriptor
  * @classdesc Encapsulates binding changes for binding listeners. */
-var ChangesDescriptor = function (path, listenerPath, valueChanged, metaChanged, stateTransition) {
+var ChangesDescriptor = function(path, listenerPath, valueChanged, metaChanged, stateTransition) {
   /** @private */
   this._path = path;
   /** @private */
@@ -39,64 +39,62 @@ var ChangesDescriptor = function (path, listenerPath, valueChanged, metaChanged,
 
 /** @lends ChangesDescriptor.prototype */
 ChangesDescriptor.prototype = {
-
   /** Get changed path relative to binding's path listener was installed on.
    * @return {Array} changed path */
-  getPath: function () {
+  getPath: function() {
     var listenerPathLen = this._listenerPath.length;
     return listenerPathLen === this._path.length ? [] : this._path.slice(listenerPathLen);
   },
 
   /** Check if binding's value was changed.
    * @returns {Boolean} */
-  isValueChanged: function () {
+  isValueChanged: function() {
     return this._valueChanged;
   },
 
   /** Check if meta binding's value was changed.
    * @returns {Boolean} */
-  isMetaChanged: function () {
+  isMetaChanged: function() {
     return this._metaChanged;
   },
 
   /** Get current value at listening path.
    * @returns {*} current value at listening path */
-  getCurrentValue: function () {
+  getCurrentValue: function() {
     return this._currentBackingValue.getIn(this._listenerPath);
   },
 
   /** Get previous value at listening path.
    * @returns {*} previous value at listening path */
-  getPreviousValue: function () {
+  getPreviousValue: function() {
     return this._previousBackingValue.getIn(this._listenerPath);
   },
 
   /** Get current meta at listening path.
    * @returns {*} current meta value at listening path */
-  getCurrentMeta: function () {
+  getCurrentMeta: function() {
     return this._currentBackingMeta ? this._currentBackingMeta.getIn(this._metaPath) : null;
   },
 
   /** Get previous meta at listening path.
    * @returns {*} current meta value at listening path */
-  getPreviousMeta: function () {
+  getPreviousMeta: function() {
     return this._previousBackingMeta ? this._previousBackingMeta.getIn(this._metaPath) : null;
   },
 
   /** Get previous backing value.
    * @protected
    * @returns {*} */
-  getPreviousBackingValue: function () {
+  getPreviousBackingValue: function() {
     return this._previousBackingValue;
   },
 
   /** Get previous backing meta value.
    * @protected
    * @returns {*} */
-  getPreviousBackingMeta: function () {
+  getPreviousBackingMeta: function() {
     return this._previousBackingMeta || null;
-  }
-
+  },
 };
 
 module.exports = ChangesDescriptor;

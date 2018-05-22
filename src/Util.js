@@ -12,11 +12,11 @@
 
 var isRequired, findTurningPoint, prepare;
 
-isRequired = function (spec) {
+isRequired = function(spec) {
   return typeof spec === 'string' && spec.charAt(0) !== '?';
 };
 
-findTurningPoint = function (arr, pred) {
+findTurningPoint = function(arr, pred) {
   var first = pred(arr[0]);
   for (var i = 1; i < arr.length; i++) {
     if (pred(arr[i]) !== first) return i;
@@ -24,17 +24,19 @@ findTurningPoint = function (arr, pred) {
   return null;
 };
 
-prepare = function (arr, splitAt) {
-  return arr.slice(splitAt).reverse().concat(arr.slice(0, splitAt));
+prepare = function(arr, splitAt) {
+  return arr
+    .slice(splitAt)
+    .reverse()
+    .concat(arr.slice(0, splitAt));
 };
 
 module.exports = {
-
   /** Identity function. Returns its first argument.
    * @param {*} x argument to return
    * @return {*} its first argument
    * @memberOf Util */
-  identity: function (x) {
+  identity: function(x) {
     return x;
   },
 
@@ -42,7 +44,7 @@ module.exports = {
    * @param {*} x argument
    * @returns {*} !x
    * @memberOf Util */
-  not: function (x) {
+  not: function(x) {
     return !x;
   },
 
@@ -50,13 +52,15 @@ module.exports = {
    * @param {*} x constant function return value
    * @return {Function} function always returning x
    * @memberOf Util */
-  constantly: function (x) {
-    return function () { return x; };
+  constantly: function(x) {
+    return function() {
+      return x;
+    };
   },
 
   /** Execute function asynchronously.
    * @param {Function} f function */
-  async: function (f) {
+  async: function(f) {
     setTimeout(f, 0);
   },
 
@@ -64,7 +68,7 @@ module.exports = {
    * @param {Function} f function to execute first
    * @param {Function} cont function to execute after f
    * @memberOf Util */
-  afterComplete: function (f, cont) {
+  afterComplete: function(f, cont) {
     var result = f();
     if (result && typeof result.always === 'function') {
       result.always(cont);
@@ -77,7 +81,7 @@ module.exports = {
    * @param {*} x argument to check
    * @returns {Boolean}
    * @memberOf Util */
-  undefinedOrNull: function (x) {
+  undefinedOrNull: function(x) {
     return x === undefined || x === null;
   },
 
@@ -85,8 +89,10 @@ module.exports = {
    * @param {Object} obj object
    * @return {Array} object's properties values
    * @memberOf Util */
-  getPropertyValues: function (obj) {
-    return Object.keys(obj).map(function (key) { return obj[key]; });
+  getPropertyValues: function(obj) {
+    return Object.keys(obj).map(function(key) {
+      return obj[key];
+    });
   },
 
   /** Find array element satisfying the predicate.
@@ -94,7 +100,7 @@ module.exports = {
    * @param {Function} pred predicate accepting current value, index, original array
    * @return {*} found value or null
    * @memberOf Util */
-  find: function (arr, pred) {
+  find: function(arr, pred) {
     for (var i = 0; i < arr.length; i++) {
       var value = arr[i];
       if (pred(value, i, arr)) {
@@ -119,7 +125,7 @@ module.exports = {
    * @param {*} var_args arguments specs as a var-args list or array, see method description
    * @returns {Object} arguments descriptor object
    * @memberOf Util */
-  resolveArgs: function (args, var_args) {
+  resolveArgs: function(args, var_args) {
     var result = {};
     if (arguments.length > 1) {
       var specs = Array.isArray(var_args) ? var_args : Array.prototype.slice.call(arguments, 1);
@@ -135,14 +141,18 @@ module.exports = {
         preparedArgs = prepare(effectiveArgs, effectiveArgs.length - (specs.length - turningPoint));
       }
 
-      for (var specIndex = 0, argIndex = 0;
-           specIndex < preparedSpecs.length && argIndex < preparedArgs.length; specIndex++) {
-        var spec = preparedSpecs[specIndex], arg = preparedArgs[argIndex];
+      for (
+        var specIndex = 0, argIndex = 0;
+        specIndex < preparedSpecs.length && argIndex < preparedArgs.length;
+        specIndex++
+      ) {
+        var spec = preparedSpecs[specIndex],
+          arg = preparedArgs[argIndex];
         if (isRequired(spec)) {
           result[spec] = arg;
           argIndex++;
         } else {
-          var name = typeof spec === 'function' ? spec(arg) : (spec.charAt(0) !== '?' ? spec : spec.substring(1));
+          var name = typeof spec === 'function' ? spec(arg) : spec.charAt(0) !== '?' ? spec : spec.substring(1);
           if (name || arg === undefined) {
             result[name] = arg;
             argIndex++;
@@ -158,7 +168,7 @@ module.exports = {
    * @param {*} x
    * @returns {Boolean}
    * @memberOf Util */
-  canRepresentSubpath: function (x) {
+  canRepresentSubpath: function(x) {
     var type = typeof x;
     return type === 'string' || type === 'number' || Array.isArray(x);
   },
@@ -173,14 +183,13 @@ module.exports = {
    * @param {Array} path2 array of string and numbers
    * @returns {Array} joined path
    * @memberOf Util */
-  joinPaths: function (path1, path2) {
-    return path1.length === 0 ? path2 :
-      (path2.length === 0 ? path1 : path1.concat(path2));
+  joinPaths: function(path1, path2) {
+    return path1.length === 0 ? path2 : path2.length === 0 ? path1 : path1.concat(path2);
   },
 
   /** ES6 Object.assign.
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign */
-  assign: function (target, firstSource) {
+  assign: function(target, firstSource) {
     if (target === undefined || target === null) {
       throw new TypeError('Cannot convert first argument to object');
     }
@@ -192,16 +201,14 @@ module.exports = {
 
     for (var i = 1; i < arguments.length; i++) {
       var nextSource = arguments[i];
-      if (nextSource === undefined || nextSource === null)
-        continue;
+      if (nextSource === undefined || nextSource === null) continue;
 
       var keysArray = Object.keys(Object(nextSource));
       for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
         var nextKey = keysArray[nextIndex];
         try {
           var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-          if (desc !== undefined && desc.enumerable)
-            to[nextKey] = nextSource[nextKey];
+          if (desc !== undefined && desc.enumerable) to[nextKey] = nextSource[nextKey];
         } catch (e) {
           if (!hasPendingException) {
             hasPendingException = true;
@@ -210,10 +217,8 @@ module.exports = {
         }
       }
 
-      if (hasPendingException)
-        throw pendingException;
+      if (hasPendingException) throw pendingException;
     }
     return to;
-  }
-
+  },
 };

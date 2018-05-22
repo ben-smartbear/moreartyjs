@@ -3,68 +3,85 @@ var Binding = require('./Binding');
 
 var getHistoryBinding, initHistory, clearHistory, destroyHistory, listenForChanges, revertToStep, revert;
 
-getHistoryBinding = function (binding) {
+getHistoryBinding = function(binding) {
   return binding.meta('history');
 };
 
-initHistory = function (historyBinding) {
+initHistory = function(historyBinding) {
   historyBinding.set(Imm.fromJS({ listenerId: null, undo: [], redo: [] }));
 };
 
-clearHistory = function (historyBinding) {
+clearHistory = function(historyBinding) {
   var listenerId = historyBinding.get('listenerId');
-  historyBinding.withDisabledListener(listenerId, function () {
-    historyBinding.atomically()
+  historyBinding.withDisabledListener(listenerId, function() {
+    historyBinding
+      .atomically()
       .set('undo', Imm.List.of())
       .set('redo', Imm.List.of())
       .commit();
   });
 };
 
-destroyHistory = function (binding, notify) {
+destroyHistory = function(binding, notify) {
   var historyBinding = getHistoryBinding(binding);
   var listenerId = historyBinding.get('listenerId');
   binding.removeListener(listenerId);
-  historyBinding.atomically().set(null).commit({ notify: notify });
+  historyBinding
+    .atomically()
+    .set(null)
+    .commit({ notify: notify });
 };
 
-listenForChanges = function (binding, historyBinding) {
-  var listenerId = binding.addListener([], function (changes) {
+listenForChanges = function(binding, historyBinding) {
+  var listenerId = binding.addListener([], function(changes) {
     if (changes.isValueChanged()) {
-      historyBinding.atomically().update(function (history) {
-        var path = changes.getPath();
-        var previousValue = changes.getPreviousValue(), newValue = binding.get();
-        return history
-          .update('undo', function (undo) {
-            var pathAsArray = Binding.asArrayPath(path);
-            return undo && undo.unshift(Imm.Map({
-              newValue: pathAsArray.length ? newValue.getIn(pathAsArray) : newValue,
-              oldValue: pathAsArray.length ? previousValue && previousValue.getIn(pathAsArray) : previousValue,
-              path: path
-            }));
-          })
-          .set('redo', Imm.List.of());
-      }).commit({ notify: false });
+      historyBinding
+        .atomically()
+        .update(function(history) {
+          var path = changes.getPath();
+          var previousValue = changes.getPreviousValue(),
+            newValue = binding.get();
+          return history
+            .update('undo', function(undo) {
+              var pathAsArray = Binding.asArrayPath(path);
+              return (
+                undo &&
+                undo.unshift(
+                  Imm.Map({
+                    newValue: pathAsArray.length ? newValue.getIn(pathAsArray) : newValue,
+                    oldValue: pathAsArray.length ? previousValue && previousValue.getIn(pathAsArray) : previousValue,
+                    path: path,
+                  })
+                )
+              );
+            })
+            .set('redo', Imm.List.of());
+        })
+        .commit({ notify: false });
     }
   });
 
-  historyBinding.atomically().set('listenerId', listenerId).commit({ notify: false });
+  historyBinding
+    .atomically()
+    .set('listenerId', listenerId)
+    .commit({ notify: false });
 };
 
-revertToStep = function (path, value, listenerId, binding) {
-  binding.withDisabledListener(listenerId, function () {
+revertToStep = function(path, value, listenerId, binding) {
+  binding.withDisabledListener(listenerId, function() {
     binding.set(path, value);
   });
 };
 
-revert = function (binding, fromBinding, toBinding, listenerId, valueProperty) {
+revert = function(binding, fromBinding, toBinding, listenerId, valueProperty) {
   var from = fromBinding.get();
   if (!from.isEmpty()) {
     var step = from.get(0);
 
-    fromBinding.atomically()
+    fromBinding
+      .atomically()
       .remove(0)
-      .update(toBinding, function (to) {
+      .update(toBinding, function(to) {
         return to.unshift(step);
       })
       .commit({ notify: false });
@@ -76,18 +93,16 @@ revert = function (binding, fromBinding, toBinding, listenerId, valueProperty) {
   }
 };
 
-
 /**
  * @name History
  * @namespace
  * @classdesc Undo/redo history handling.
  */
 var History = {
-
   /** Init history.
    * @param {Binding} binding binding
    * @memberOf History */
-  init: function (binding) {
+  init: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     initHistory(historyBinding);
     listenForChanges(binding, historyBinding);
@@ -96,7 +111,7 @@ var History = {
   /** Clear history.
    * @param {Binding} binding binding
    * @memberOf History */
-  clear: function (binding) {
+  clear: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     clearHistory(historyBinding);
   },
@@ -106,7 +121,7 @@ var History = {
    * @param {Object} [options] options object
    * @param {Boolean} [options.notify=true] should listeners be notified
    * @memberOf History */
-  destroy: function (binding, options) {
+  destroy: function(binding, options) {
     var effectiveOptions = options || {};
     destroyHistory(binding, effectiveOptions.notify);
   },
@@ -115,7 +130,7 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean}
    * @memberOf History */
-  hasUndo: function (binding) {
+  hasUndo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var undo = historyBinding.get('undo');
     return !!undo && !undo.isEmpty();
@@ -125,7 +140,7 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean}
    * @memberOf History */
-  hasRedo: function (binding) {
+  hasRedo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var redo = historyBinding.get('redo');
     return !!redo && !redo.isEmpty();
@@ -135,7 +150,7 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean} true, if binding has undo information
    * @memberOf History */
-  undo: function (binding) {
+  undo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var listenerId = historyBinding.get('listenerId');
     var undoBinding = historyBinding.sub('undo');
@@ -147,14 +162,13 @@ var History = {
    * @param {Binding} binding binding
    * @returns {Boolean} true, if binding has redo information
    * @memberOf History */
-  redo: function (binding) {
+  redo: function(binding) {
     var historyBinding = getHistoryBinding(binding);
     var listenerId = historyBinding.get('listenerId');
     var undoBinding = historyBinding.sub('undo');
     var redoBinding = historyBinding.sub('redo');
     return revert(binding, redoBinding, undoBinding, listenerId, 'newValue');
-  }
-
+  },
 };
 
 module.exports = History;
