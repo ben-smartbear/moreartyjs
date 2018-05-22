@@ -37,15 +37,15 @@
     "prop-types": "^15.6.1",
     "q": "1.4.1",
     "sinon": "^1.17.x",
-    "uglify-js": "^2.5.x"
+    "uglify-js": "^2.5.x",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
   },
   "peerDependencies": {},
   "browserify-shim": {
     "react": "global:React",
+    "react-dom": "global:ReactDOM",
     "immutable": "global:Immutable"
   },
-  "dependencies": {
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
-  }
+  "dependencies": {}
 }
