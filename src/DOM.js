@@ -1,4 +1,4 @@
-var Util  = require('./Util');
+var Util = require('./Util');
 var React = require('react');
 
 var _ = (function() {
@@ -8,16 +8,15 @@ var _ = (function() {
   }
 })();
 
-var wrapComponent = function (comp, displayName) {
+var wrapComponent = function(comp, displayName) {
   return React.createClass({
-
     displayName: displayName,
 
-    getInitialState: function () {
+    getInitialState: function() {
       return { value: this.props.value };
     },
 
-    onChange: function (event) {
+    onChange: function(event) {
       var handler = this.props.onChange;
       if (handler) {
         handler(event);
@@ -25,19 +24,18 @@ var wrapComponent = function (comp, displayName) {
       }
     },
 
-    componentWillReceiveProps: function (newProps) {
+    componentWillReceiveProps: function(newProps) {
       this.setState({ value: newProps.value });
     },
 
-    render: function () {
+    render: function() {
       var props = Util.assign({}, this.props, {
         value: this.state.value,
         onChange: this.onChange,
-        children: this.props.children
+        children: this.props.children,
       });
       return comp(props);
-    }
-
+    },
   });
 };
 
@@ -47,13 +45,11 @@ var wrapComponent = function (comp, displayName) {
  * @classdesc DOM module. Exposes requestAnimationFrame-friendly wrappers around input, textarea, and option.
  */
 var DOM = {
-
   input: wrapComponent(_.input, 'input'),
 
   textarea: wrapComponent(_.textarea, 'textarea'),
 
-  option: wrapComponent(_.option, 'option')
-
+  option: wrapComponent(_.option, 'option'),
 };
 
 module.exports = DOM;

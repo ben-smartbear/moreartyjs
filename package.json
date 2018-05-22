@@ -4,13 +4,7 @@
   "description": "Centralized state management for React in pure JavaScript.",
   "homepage": "https://github.com/moreartyjs/moreartyjs",
   "author": "Alexander Semenov",
-  "keywords": [
-    "moreartyjs",
-    "morearty",
-    "react",
-    "immutable",
-    "persistent"
-  ],
+  "keywords": ["moreartyjs", "morearty", "react", "immutable", "persistent"],
   "scripts": {
     "build": "npm test && npm run build:dev && npm run uglify",
     "build:dev": "browserify ./index.js -t browserify-shim -s Morearty -o dist/morearty.js",
@@ -28,14 +22,7 @@
   "engines": {
     "node": ">=0.10.0"
   },
-  "files": [
-    "src/*",
-    "README.md",
-    "index.js",
-    "native.js",
-    "dist/morearty.js",
-    "dist/morearty.min.js"
-  ],
+  "files": ["src/*", "README.md", "index.js", "native.js", "dist/morearty.js", "dist/morearty.min.js"],
   "devDependencies": {
     "browserify": "^12.0.x",
     "chai": "^3.4.0",
